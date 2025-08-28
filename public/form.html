@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Contact Form</title>
+</head>
+<body>
+    <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="contact" />
+        <div class="hidden">
+            <input name="bot-field" />
+        </div>
+        
+        <p>
+            <label>Nom: <input type="text" name="name" required /></label>
+        </p>
+        <p>
+            <label>Email: <input type="email" name="email" required /></label>
+        </p>
+        <p>
+            <label>Message: <textarea name="message" required></textarea></label>
+        </p>
+        <p>
+            <button type="submit">Envoyer</button>
+        </p>
+    </form>
+</body>
+</html>

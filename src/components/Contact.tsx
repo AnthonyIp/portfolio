@@ -1,4 +1,7 @@
 import {Github, Linkedin, Mail, Phone} from 'lucide-react';
+import { useState } from 'react';
+import Toast from './Toast';
+import HoneypotField from './HoneypotField';
 
 type Props = {
     isDarkMode: boolean;
@@ -21,11 +24,220 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
     const isFr = labels.name === 'Nom';
     const phoneLabel = isFr ? 'Téléphone' : 'Phone';
     const downloadCvText = isFr ? 'Télécharger mon CV' : 'Download my resume';
+    
+    // État pour le toast
+    const [toast, setToast] = useState<{
+        isVisible: boolean;
+        type: 'success' | 'error';
+        message: string;
+    }>({
+        isVisible: false,
+        type: 'success',
+        message: ''
+    });
+    
+    // État pour le formulaire
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        message: ''
+    });
+    
+    // État pour les erreurs de validation
+    const [errors, setErrors] = useState({
+        name: '',
+        email: '',
+        message: ''
+    });
+    
+    // État pour le chargement
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const emailAddr = 'anthonyip@hotmail.fr';
     const phoneNum = '+33660561869';
     const githubUrl = 'https://github.com/AnthonyIp';
     const linkedinUrl = 'https://linkedin.com/in/anthony-ip-1206';
+
+    // Validation des champs
+    const validateField = (name: string, value: string): string => {
+        switch (name) {
+            case 'name':
+                if (value.length < 2) return 'Le nom doit contenir au moins 2 caractères';
+                if (value.length > 50) return 'Le nom ne peut pas dépasser 50 caractères';
+                if (!/^[a-zA-ZÀ-ÿ\s'-]+$/.test(value)) return 'Le nom ne peut contenir que des lettres, espaces, tirets et apostrophes';
+                break;
+            case 'email':
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Format d\'email invalide';
+                if (value.length > 100) return 'L\'email ne peut pas dépasser 100 caractères';
+                break;
+            case 'message':
+                if (value.length < 10) return 'Le message doit contenir au moins 10 caractères';
+                if (value.length > 1000) return 'Le message ne peut pas dépasser 1000 caractères';
+                break;
+        }
+        return '';
+    };
+
+    // Gestion des changements de formulaire avec validation
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        
+        // Mettre à jour le formulaire d'abord
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+        
+        // Validation en temps réel avec délai pour éviter trop de calculs
+        setTimeout(() => {
+            const error = validateField(name, value);
+            setErrors(prev => ({
+                ...prev,
+                [name]: error
+            }));
+        }, 300); // Délai de 300ms pour éviter la validation à chaque frappe
+    };
+
+    // Validation complète du formulaire
+    const validateForm = (): boolean => {
+        const newErrors = {
+            name: validateField('name', formData.name),
+            email: validateField('email', formData.email),
+            message: validateField('message', formData.message)
+        };
+        
+        setErrors(newErrors);
+        
+        // Vérifier s'il y a des erreurs
+        return !Object.values(newErrors).some(error => error !== '');
+    };
+
+    // Gestion de la soumission du formulaire
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        
+        // Validation avant envoi
+        if (!validateForm()) {
+            // Trouver le premier champ avec une erreur pour le focus
+            const firstErrorField = Object.entries(errors).find(([_, error]) => error !== '');
+            if (firstErrorField) {
+                const fieldName = firstErrorField[0];
+                const fieldElement = document.getElementById(fieldName);
+                if (fieldElement) {
+                    fieldElement.focus();
+                }
+            }
+            
+            setToast({
+                isVisible: true,
+                type: 'error',
+                message: isFr ? 'Veuillez corriger les erreurs dans le formulaire.' : 'Please fix the form errors.'
+            });
+            return;
+        }
+
+        // Protection contre la soumission multiple
+        if (isSubmitting) return;
+        
+        setIsSubmitting(true);
+
+        try {
+            // Nettoyer et valider les données
+            const sanitizedData = {
+                name: formData.name.trim().replace(/[<>]/g, '').replace(/[&]/g, '&amp;'),
+                email: formData.email.trim().toLowerCase().replace(/[<>]/g, '').replace(/[&]/g, '&amp;'),
+                message: formData.message.trim().replace(/[<>]/g, '').replace(/[&]/g, '&amp;')
+            };
+
+            // Validation côté serveur supplémentaire
+            if (sanitizedData.name.length < 2 || sanitizedData.name.length > 50) {
+                throw new Error('Nom invalide');
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(sanitizedData.email)) {
+                throw new Error('Email invalide');
+            }
+            if (sanitizedData.message.length < 10 || sanitizedData.message.length > 1000) {
+                throw new Error('Message invalide');
+            }
+
+            // Créer les données du formulaire pour Netlify
+            const formDataToSend = new FormData();
+            formDataToSend.append('form-name', 'contact');
+            formDataToSend.append('name', sanitizedData.name);
+            formDataToSend.append('email', sanitizedData.email);
+            formDataToSend.append('message', sanitizedData.message);
+
+            // Envoyer via Netlify Forms avec timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 secondes
+
+            const response = await fetch('/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(formDataToSend as any).toString(),
+                signal: controller.signal
+            });
+
+            clearTimeout(timeoutId);
+
+            if (response.ok) {
+                // Succès
+                setToast({
+                    isVisible: true,
+                    type: 'success',
+                    message: isFr ? 'Message envoyé avec succès !' : 'Message sent successfully!'
+                });
+                
+                // Réinitialiser le formulaire et les erreurs
+                setFormData({ name: '', email: '', message: '' });
+                setErrors({ name: '', email: '', message: '' });
+            } else {
+                // Erreur HTTP spécifique
+                const errorMessage = isFr 
+                    ? `Erreur ${response.status}: ${response.statusText || 'Erreur réseau'}`
+                    : `Error ${response.status}: ${response.statusText || 'Network error'}`;
+                
+                setToast({
+                    isVisible: true,
+                    type: 'error',
+                    message: errorMessage
+                });
+                return;
+            }
+            
+        } catch (error) {
+            // Erreur
+            if (error instanceof Error && error.name === 'AbortError') {
+                setToast({
+                    isVisible: true,
+                    type: 'error',
+                    message: isFr ? 'Délai d\'attente dépassé. Veuillez réessayer.' : 'Request timeout. Please try again.'
+                });
+            } else if (error instanceof Error) {
+                // Erreur de validation côté serveur
+                setToast({
+                    isVisible: true,
+                    type: 'error',
+                    message: error.message || (isFr ? 'Erreur lors de l\'envoi du message.' : 'Error sending message.')
+                });
+            } else {
+                setToast({
+                    isVisible: true,
+                    type: 'error',
+                    message: isFr ? 'Erreur inconnue lors de l\'envoi du message.' : 'Unknown error sending message.'
+                });
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    // Fermer le toast
+    const closeToast = () => {
+        setToast(prev => ({ ...prev, isVisible: false }));
+    };
 
     return (
         <section id="contact" aria-labelledby="contact-heading" className={`py-20 ${isDarkMode ? 'bg-gray-900/60' : 'bg-gray-100/60'}`}>
@@ -84,30 +296,122 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                     </div>
                     <div
                         className={`p-8 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}>
-                        <form className="space-y-6">
+                        <form 
+                            name="contact" 
+                            method="POST" 
+                            data-netlify="true"
+                            data-netlify-honeypot="bot-field"
+                            onSubmit={handleSubmit}
+                            className="space-y-6"
+                        >
+                            {/* Champ caché pour Netlify */}
+                            <input type="hidden" name="form-name" value="contact" />
+                            
+                            {/* Honeypot anti-spam */}
+                            <HoneypotField name="bot-field" />
+                            
                             <div>
-                                <label className="block text-sm font-medium mb-2">{labels.name}</label>
-                                <input type="text"
-                                       className={`w-full px-4 py-3 border rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors duration-200 ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
-                                       placeholder={labels.namePlaceholder}/>
+                                <label htmlFor="name" className="block text-sm font-medium mb-2">{labels.name}</label>
+                                <input 
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                    required
+                                    className={`w-full px-4 py-3 border rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors duration-200 ${
+                                        errors.name 
+                                            ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
+                                            : formData.name && !errors.name
+                                            ? 'border-green-500 focus:border-green-500 focus:ring-green-500'
+                                            : isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'
+                                    }`}
+                                    placeholder={labels.namePlaceholder}
+                                />
+                                {errors.name && (
+                                    <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+                                )}
+                                {formData.name && !errors.name && (
+                                    <p className="mt-1 text-sm text-green-500">✓ Nom valide</p>
+                                )}
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-2">{labels.email}</label>
-                                <input type="email"
-                                       className={`w-full px-4 py-3 border rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors duration-200 ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
-                                       placeholder={labels.emailPlaceholder}/>
+                                <label htmlFor="email" className="block text-sm font-medium mb-2">{labels.email}</label>
+                                <input 
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    required
+                                    className={`w-full px-4 py-3 border rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors duration-200 ${
+                                        errors.email 
+                                            ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
+                                            : formData.email && !errors.email
+                                            ? 'border-green-500 focus:border-green-500 focus:ring-green-500'
+                                            : isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'
+                                    }`}
+                                    placeholder={labels.emailPlaceholder}
+                                />
+                                {errors.email && (
+                                    <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                                )}
+                                {formData.email && !errors.email && (
+                                    <p className="mt-1 text-sm text-green-500">✓ Email valide</p>
+                                )}
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-2">{labels.message}</label>
-                                <textarea rows={4}
-                                          className={`w-full px-4 py-3 border rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors duration-200 ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
-                                          placeholder={labels.messagePlaceholder}></textarea>
+                                <label htmlFor="message" className="block text-sm font-medium mb-2">{labels.message}</label>
+                                <textarea 
+                                    rows={4}
+                                    id="message"
+                                    name="message"
+                                    value={formData.message}
+                                    onChange={handleInputChange}
+                                    required
+                                    className={`w-full px-4 py-3 border rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors duration-200 ${
+                                        errors.message 
+                                            ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
+                                            : formData.message && !errors.message
+                                            ? 'border-green-500 focus:border-green-500 focus:ring-green-500'
+                                            : isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'
+                                    }`}
+                                    placeholder={labels.messagePlaceholder}
+                                ></textarea>
+                                {errors.message && (
+                                    <p className="mt-1 text-sm text-red-500">{errors.message}</p>
+                                )}
+                                {formData.message && !errors.message && (
+                                    <p className="mt-1 text-sm text-green-500">✓ Message valide</p>
+                                )}
                             </div>
-                            <button type="submit" className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to purple-600 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">{labels.send}</button>
+                            <button 
+                                type="submit" 
+                                disabled={isSubmitting}
+                                className={`w-full px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 ${
+                                    isSubmitting 
+                                        ? 'bg-gray-400 cursor-not-allowed' 
+                                        : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700'
+                                }`}
+                            >
+                                {isSubmitting 
+                                    ? (isFr ? 'Envoi en cours...' : 'Sending...') 
+                                    : labels.send
+                                }
+                            </button>
                         </form>
                     </div>
                 </div>
             </div>
+            
+            {/* Toast de notification */}
+            <Toast
+                type={toast.type}
+                message={toast.message}
+                isVisible={toast.isVisible}
+                onClose={closeToast}
+                duration={4000}
+            />
         </section>
     );
 }
