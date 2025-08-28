@@ -38,5 +38,4 @@ export type ProjectsProps = {
     allLabel: string;
     projects: Project[];
     language: ProjectLanguage;
-    setLanguage: (lang: ProjectLanguage) => void;
 };

@@ -10,7 +10,6 @@ import BackToTop from './components/BackToTop';
 import {useLocalStorage} from './hooks';
 import type {Language} from './types';
 import {useEffect, useMemo, useState} from 'react';
-import { resolvePath, getBasePath } from './utils/paths';
 
 export default function App() {
     const [isDarkMode, setIsDarkMode] = useLocalStorage<boolean>('theme-dark', true);
@@ -32,17 +31,17 @@ export default function App() {
 
     // Load i18n and data JSON from public
     useEffect(() => {
-        fetch(resolvePath('datas/i18n.json'))
+        fetch('/datas/i18n.json')
             .then(r => r.json())
             .then((all) => setT(all[language] || all['fr'] || {}))
             .catch(() => setT({}));
 
-        fetch(resolvePath('datas/data-timeline.json'))
+        fetch('/datas/data-timeline.json')
             .then(r => r.json())
             .then(j => setTimelineRaw(j.timeline || []))
             .catch(() => setTimelineRaw([]));
 
-        fetch(resolvePath('datas/data-projects.json'))
+        fetch('/datas/data-projects.json')
             .then(r => r.json())
             .then(j => setProjectsRaw(j.projects || []))
             .catch(() => setProjectsRaw([]));
@@ -87,22 +86,38 @@ export default function App() {
         }));
     }, [projectsRaw]);
 
-    // Inject dynamic hreflang alternates
+    // Inject dynamic hreflang alternates and canonical
     useEffect(() => {
         const head = document.head;
-        const existing = Array.from(head.querySelectorAll('link[rel="alternate"][hreflang]'));
-        existing.forEach((el) => el.parentElement?.removeChild(el));
-        const basePath = getBasePath();
+        
+        // Supprimer les liens existants pour éviter les doublons
+        const existingAlternates = Array.from(head.querySelectorAll('link[rel="alternate"][hreflang]'));
+        const existingCanonical = Array.from(head.querySelectorAll('link[rel="canonical"]'));
+        
+        existingAlternates.forEach((el) => el.parentElement?.removeChild(el));
+        existingCanonical.forEach((el) => el.parentElement?.removeChild(el));
+        
+        // Ajouter le lien canonical
+        const canonical = document.createElement('link');
+        canonical.rel = 'canonical';
+        canonical.href = window.location.origin + window.location.pathname;
+        head.appendChild(canonical);
+        
+        // Ajouter les liens hreflang
+        const basePath = window.location.origin;
         const en = document.createElement('link');
-        en.setAttribute('rel', 'alternate');
-        en.setAttribute('hreflang', 'en');
-        en.setAttribute('href', basePath);
-        const fr = document.createElement('link');
-        fr.setAttribute('rel', 'alternate');
-        fr.setAttribute('hreflang', 'fr');
-        fr.setAttribute('href', basePath + 'fr');
+        en.rel = 'alternate';
+        en.hreflang = 'en';
+        en.href = basePath;
         head.appendChild(en);
+        
+        const fr = document.createElement('link');
+        fr.rel = 'alternate';
+        fr.hreflang = 'fr';
+        fr.href = basePath + '/fr';
         head.appendChild(fr);
+        
+        console.log('✅ Liens canonical et hreflang ajoutés dynamiquement');
     }, [language]);
 
     const navFallback = {home: '', about: '', timeline: '', projects: '', contact: ''};
