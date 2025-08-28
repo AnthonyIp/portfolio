@@ -171,7 +171,7 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 secondes
 
-            const response = await fetch('/', {
+            const response = await fetch('', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
