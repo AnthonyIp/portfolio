@@ -112,12 +112,12 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
         return !Object.values(newErrors).some(error => error !== '');
     };
 
-    // Gestion de la soumission du formulaire
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
+        // Gestion de la soumission du formulaire
+    const handleSubmit = (e: React.FormEvent) => {
         // Validation avant envoi
         if (!validateForm()) {
+            e.preventDefault();
+            
             // Trouver le premier champ avec une erreur pour le focus
             const firstErrorField = Object.entries(errors).find(([_, error]) => error !== '');
             if (firstErrorField) {
@@ -127,7 +127,7 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                     fieldElement.focus();
                 }
             }
-
+            
             setToast({
                 isVisible: true,
                 type: 'error',
@@ -137,8 +137,11 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
         }
 
         // Protection contre la soumission multiple
-        if (isSubmitting) return;
-
+        if (isSubmitting) {
+            e.preventDefault();
+            return;
+        }
+        
         setIsSubmitting(true);
 
         // Nettoyer et valider les données
@@ -151,21 +154,20 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
         // Mettre à jour le formulaire avec les données nettoyées
         setFormData(sanitizedData);
 
-        // Laisser Netlify gérer la soumission
-        // Le formulaire sera soumis automatiquement après un délai
+        // Laisser Netlify gérer la soumission native
+        // Afficher le toast de succès après un délai
         setTimeout(() => {
-            // Simuler le succès (Netlify gère l'envoi)
             setToast({
                 isVisible: true,
                 type: 'success',
                 message: isFr ? 'Message envoyé avec succès !' : 'Message sent successfully!'
             });
-
+            
             // Réinitialiser le formulaire et les erreurs
             setFormData({name: '', email: '', message: ''});
             setErrors({name: '', email: '', message: ''});
             setIsSubmitting(false);
-        }, 1000);
+        }, 2000);
     };
 
     // Fermer le toast
@@ -222,15 +224,14 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                         </div>
                     </div>
                     <div className={`p-8 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}>
-                        <form
-                            name="contact"
-                            method="POST"
-                            data-netlify="true"
-                            data-netlify-honeypot="bot-field"
-                            action="/"
-                            onSubmit={handleSubmit}
-                            className="space-y-6"
-                        >
+                                                 <form
+                             name="contact"
+                             method="POST"
+                             data-netlify="true"
+                             data-netlify-honeypot="bot-field"
+                             onSubmit={handleSubmit}
+                             className="space-y-6"
+                         >
                             {/* Champ caché pour Netlify */}
                             <input type="hidden" name="form-name" value="contact"/>
 
