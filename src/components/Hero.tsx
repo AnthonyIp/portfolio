@@ -22,7 +22,7 @@ export function Hero({isDarkMode, title, subtitle, ctaView, ctaContact, onViewCl
                     <h1 id="home-heading" className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-500 to-emerald-400 bg-clip-text text-transparent">{title}</h1>
                     <p className={`text-xl md:text-2xl mb-8 leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>{subtitle}</p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button onClick={onViewClick} className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">{ctaView}</button>
+                        <button onClick={onViewClick} className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">{ctaView}</button>
                         <button onClick={onContactClick} className={`px-8 py-3 border-2 rounded-lg font-semibold transition-all duration-300 ${isDarkMode ? 'border-gray-400 hover:border-white hover:bg-white hover:text-gray-900' : 'border-gray-600 hover:border-gray-900 hover:bg-gray-900 hover:text-white'}`}>{ctaContact}</button>
                     </div>
                 </div>

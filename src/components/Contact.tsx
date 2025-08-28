@@ -321,10 +321,12 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                                     required
                                     className={`w-full px-4 py-3 border rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors duration-200 ${
                                         errors.name 
-                                            ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
+                                            ? 'border-red-500 focus:border-red-500 focus:ring-red-500 bg-red-50 text-red-900' 
                                             : formData.name && !errors.name
-                                            ? 'border-green-500 focus:border-green-500 focus:ring-green-500'
-                                            : isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'
+                                            ? 'border-green-500 focus:border-green-500 focus:ring-green-500 bg-green-50 text-green-900'
+                                            : isDarkMode 
+                                                ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                                                : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
                                     }`}
                                     placeholder={labels.namePlaceholder}
                                 />
@@ -346,10 +348,12 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                                     required
                                     className={`w-full px-4 py-3 border rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors duration-200 ${
                                         errors.email 
-                                            ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
+                                            ? 'border-red-500 focus:border-red-500 focus:ring-red-500 bg-red-50 text-red-900' 
                                             : formData.email && !errors.email
-                                            ? 'border-green-500 focus:border-green-500 focus:ring-green-500'
-                                            : isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'
+                                            ? 'border-green-500 focus:border-green-500 focus:ring-green-500 bg-green-50 text-green-900'
+                                            : isDarkMode 
+                                                ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                                                : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
                                     }`}
                                     placeholder={labels.emailPlaceholder}
                                 />
@@ -371,10 +375,12 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                                     required
                                     className={`w-full px-4 py-3 border rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors duration-200 ${
                                         errors.message 
-                                            ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
+                                            ? 'border-red-500 focus:border-red-500 focus:ring-red-500 bg-red-50 text-red-900' 
                                             : formData.message && !errors.message
-                                            ? 'border-green-500 focus:border-green-500 focus:ring-green-500'
-                                            : isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'
+                                            ? 'border-green-500 focus:border-green-500 focus:ring-green-500 bg-green-50 text-green-900'
+                                            : isDarkMode 
+                                                ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                                                : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
                                     }`}
                                     placeholder={labels.messagePlaceholder}
                                 ></textarea>
