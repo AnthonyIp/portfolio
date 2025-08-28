@@ -33,15 +33,15 @@ export function About({isDarkMode, title, subtitle, description1, description2, 
                         <p className={`mb-6 leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>{description2}</p>
                         <div className="flex space-x-4">
                             <div className="text-center">
-                                <div className="text-2xl font-bold text-blue-400">50+</div>
+                                <div className="text-2xl font-bold text-blue-400">10+</div>
                                 <div className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>{stats.projects}</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl font-bold text-purple-400">5+</div>
+                                <div className="text-2xl font-bold text-purple-400">7+</div>
                                 <div className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>{stats.experience}</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl font-bold text-emerald-400">25+</div>
+                                <div className="text-2xl font-bold text-emerald-400">10+</div>
                                 <div className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>{stats.clients}</div>
                             </div>
                         </div>

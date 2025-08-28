@@ -12,8 +12,8 @@
         "Tailwind CSS"
       ],
       "image": "/images/portfolio.png",
-      "github": "",
-      "live": "",
+      "github": "https://github.com/AnthonyIp/portfolio",
+      "live": "https://anthony-ip.netlify.app/",
       "category": "web",
       "features_fr": [
         "Interface moderne et responsive avec Tailwind CSS",
@@ -102,7 +102,7 @@
         "Infection"
       ],
       "image": "/images/pap-admin.png",
-      "github": "",
+      "github": "https://github.com/AnthonyIp/pap",
       "live": "",
       "category": "web",
       "features_fr": [
@@ -136,6 +136,5 @@
       "longDescription_fr": "PaP Pédiatrie est une solution complète de gestion de contenu médical pédiatrique. Construit avec Symfony 7.3, le projet offre une interface d’administration moderne basée sur AdminLTE et Bootstrap 5. Les éditeurs disposent d’un WYSIWYG avancé (Summernote) avec gestion d’images, pièces jointes PDF et formats enrichis. Le système de cookies est strictement conforme au RGPD avec consentement explicite et gestion granulaire. La plateforme intègre également une gestion avancée des utilisateurs et rôles, une optimisation SEO, des statistiques en temps réel et un moteur de recherche performant. Le projet met en avant des standards de qualité élevés via les tests (PHPUnit, tests de mutation avec Infection) et l’analyse statique (PHPStan).",
       "longDescription_en": "PaP Pediatrics is a comprehensive pediatric medical content management solution. Built with Symfony 7.3, the project features a modern administration interface powered by AdminLTE and Bootstrap 5. Editors benefit from an advanced WYSIWYG editor (Summernote) with image uploads, PDF attachments, and rich formatting. The cookie system is fully GDPR-compliant with explicit consent and granular management. The platform also includes advanced user and role management, SEO optimization, real-time statistics, and a powerful search engine. High code quality standards are enforced through unit/integration testing (PHPUnit, Infection) and static analysis (PHPStan)."
     }
-    
   ]
 }
