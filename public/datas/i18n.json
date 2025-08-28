@@ -1,0 +1,108 @@
+{
+  "en": {
+    "nav": {
+      "home": "Home",
+      "about": "About",
+      "timeline": "Timeline",
+      "projects": "Projects",
+      "contact": "Contact"
+    },
+    "hero": {
+      "title": "Full-Stack Developer",
+      "subtitle": "Building scalable web platforms with strong PHP foundations and modern JavaScript frameworks",
+      "viewWork": "View My Work",
+      "getInTouch": "Get In Touch"
+    },
+    "about": {
+      "title": "About Me",
+      "subtitle": "Versatile Full-Stack Developer",
+      "description1": "With over 7 years of experience in web development, I have worked across diverse environments from e-commerce solutions to enterprise platforms. Starting with PrestaShop and Magento, I grew into mastering frameworks like Symfony, Laravel, React, and NestJS while also gaining strong experience in DevOps and cloud migration.",
+      "description2": "Passionate about creating maintainable and scalable solutions, I thrive in bridging backend robustness with modern frontend experiences. From architecting APIs and refactoring legacy apps to deploying full cloud-native solutions on AWS, I bring adaptability, curiosity, and dedication to each project.",
+      "projects": "Projects Completed",
+      "experience": "Years Experience",
+      "clients": "Clients",
+      "backend": "Backend Mastery",
+      "backendDesc": "Extensive expertise in PHP (Symfony, Laravel) and Node.js (NestJS) for building robust and secure backends.",
+      "frontend": "Frontend Innovation",
+      "frontendDesc": "Skilled in React, Next.js, Vue.js, and Ionic for delivering modern, responsive interfaces.",
+      "database": "Data & Cloud",
+      "databaseDesc": "Strong experience with MySQL, PostgreSQL, MongoDB, and deployments on AWS with DevOps tools."
+    },
+    "timeline": {
+      "title": "Education & Experience",
+      "subtitle": "My journey through studies and professional growth"
+    },
+    "projects": {
+      "title": "All Projects",
+      "subtitle": "A showcase of my development work in e-commerce, SaaS, and modern web apps",
+      "allProjects": "All Projects"
+    },
+    "contact": {
+      "title": "Let's Collaborate",
+      "subtitle": "Looking to transform your idea into a powerful web application? Let’s connect and build it together.",
+      "email": "Email",
+      "github": "GitHub",
+      "linkedin": "LinkedIn",
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "emailPlaceholder": "your.email@example.com",
+      "message": "Message",
+      "messagePlaceholder": "Tell me about your project...",
+      "send": "Send Message"
+    },
+    "footer": "© 2025 Anthony Ip Portfolio. Built with React, TypeScript, and Tailwind CSS."
+  },
+  "fr": {
+    "nav": {
+      "home": "Accueil",
+      "about": "À propos",
+      "timeline": "Parcours",
+      "projects": "Projets",
+      "contact": "Contact"
+    },
+    "hero": {
+      "title": "Développeur Full-Stack",
+      "subtitle": "Conception de plateformes web évolutives avec une solide expertise PHP et les frameworks JavaScript modernes",
+      "viewWork": "Voir mes projets",
+      "getInTouch": "Me contacter"
+    },
+    "about": {
+      "title": "À propos de moi",
+      "subtitle": "Développeur Full-Stack polyvalent",
+      "description1": "Avec plus de 7 ans d'expérience en développement web, j’ai évolué dans des environnements variés, de la création de solutions e-commerce à la refonte d’applications d’entreprise. Parti de PrestaShop et Magento, j’ai approfondi ma maîtrise de Symfony, Laravel, React et NestJS tout en développant une forte expérience en DevOps et migration cloud.",
+      "description2": "Passionné par la création de solutions maintenables et performantes, je m’épanouis dans l’équilibre entre robustesse backend et interfaces modernes. De l’architecture d’APIs à la refonte d’applications legacy jusqu’au déploiement cloud AWS, j’apporte adaptabilité, curiosité et engagement à chaque projet.",
+      "projects": "Projets réalisés",
+      "experience": "Années d'expérience",
+      "clients": "Clients",
+      "backend": "Maîtrise Backend",
+      "backendDesc": "Expertise avancée en PHP (Symfony, Laravel) et Node.js (NestJS) pour construire des backends robustes et sécurisés.",
+      "frontend": "Innovation Frontend",
+      "frontendDesc": "Compétences solides en React, Next.js, Vue.js et Ionic pour développer des interfaces modernes et réactives.",
+      "database": "Données & Cloud",
+      "databaseDesc": "Expérience approfondie avec MySQL, PostgreSQL, MongoDB, et déploiements sur AWS avec des outils DevOps."
+    },
+    "timeline": {
+      "title": "Formation & Expérience",
+      "subtitle": "Mon parcours académique et professionnel"
+    },
+    "projects": {
+      "title": "Tous les projets",
+      "subtitle": "Une vitrine de mes réalisations en e-commerce, SaaS et applications web modernes",
+      "allProjects": "Tous les projets"
+    },
+    "contact": {
+      "title": "Travaillons ensemble",
+      "subtitle": "Envie de transformer votre idée en application performante ? Discutons et construisons-la ensemble.",
+      "email": "Email",
+      "github": "GitHub",
+      "linkedin": "LinkedIn",
+      "name": "Nom",
+      "namePlaceholder": "Votre nom",
+      "emailPlaceholder": "votre.email@exemple.com",
+      "message": "Message",
+      "messagePlaceholder": "Parlez-moi de votre projet...",
+      "send": "Envoyer le message"
+    },
+    "footer": "© 2025 Portfolio Anthony Ip. Construit avec React, TypeScript et Tailwind CSS."
+  }
+}

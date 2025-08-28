@@ -1,0 +1,141 @@
+{
+  "projects": [
+    {
+      "title_fr": "Portfolio Développeur",
+      "title_en": "Developer Portfolio",
+      "description_fr": "Conception et développement d’un portfolio professionnel en ligne, réalisé avec Next.js et TypeScript. L’objectif était de disposer d’une vitrine moderne, performante et responsive, intégrant un design épuré et des fonctionnalités clés telles que le multilingue (FR/EN) et le mode sombre/clair.",
+      "description_en": "Design and development of a professional online portfolio built with Next.js and TypeScript. The goal was to create a modern, high-performance, and responsive showcase, featuring a clean design with essential functionalities such as bilingual support (EN/FR) and dark/light mode.",
+      "tech": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS"
+      ],
+      "image": "/images/portfolio.png",
+      "github": "",
+      "live": "",
+      "category": "web",
+      "features_fr": [
+        "Interface moderne et responsive avec Tailwind CSS",
+        "Mode sombre/clair dynamique",
+        "Contenu multilingue (français / anglais)",
+        "SEO optimisé avec Next.js",
+        "Typage strict et robuste avec TypeScript",
+        "Déploiement rapide et sécurisé"
+      ],
+      "features_en": [
+        "Modern and responsive interface with Tailwind CSS",
+        "Dynamic dark/light mode",
+        "Bilingual content (French / English)",
+        "SEO optimized with Next.js",
+        "Strict and robust typing with TypeScript",
+        "Fast and secure deployment"
+      ],
+      "duration_fr": "1 semaine",
+      "duration_en": "1 week",
+      "team_fr": "Projet individuel",
+      "team_en": "Individual project",
+      "role_fr": "Développeur Full-Stack",
+      "role_en": "Full-Stack Developer",
+      "challenges_fr": "Le principal défi était de concevoir une architecture claire et maintenable en un temps limité (1 semaine), tout en intégrant un système multilingue et un mode sombre/clair fluide. Le respect des bonnes pratiques de développement (typage strict, accessibilité, SEO) a été au cœur du projet.",
+      "challenges_en": "The main challenge was to design a clear and maintainable architecture within a short timeframe (1 week), while implementing a seamless bilingual system and dark/light mode. Adhering to development best practices (strict typing, accessibility, SEO) was central to the project.",
+      "longDescription_fr": "Ce projet avait pour objectif de mettre en valeur mes compétences et expériences à travers un portfolio professionnel, moderne et évolutif. Développé avec Next.js et TypeScript, il exploite Tailwind CSS pour offrir une interface responsive et élégante. L’intégration d’un système multilingue (FR/EN), d’un mode sombre/clair et d’optimisations SEO assure une visibilité en ligne optimale. Réalisé en une semaine, ce projet démontre ma capacité à concevoir rapidement une solution technique complète et alignée avec les standards professionnels.",
+      "longDescription_en": "The goal of this project was to showcase my skills and experience through a professional, modern, and scalable portfolio. Built with Next.js and TypeScript, it leverages Tailwind CSS to deliver a responsive and elegant interface. The integration of bilingual support (EN/FR), dark/light mode, and SEO optimizations ensures strong online visibility. Completed within one week, this project highlights my ability to rapidly design a complete technical solution aligned with professional standards."
+    },
+    {
+      "title_fr": "Refonte de la plateforme DPD",
+      "title_en": "DPD Platform Redesign",
+      "description_fr": "Participation à la refonte majeure de la plateforme web de DPD, avec Symfony 6 pour le backend et PostgreSQL comme base de données. Le projet a consisté à moderniser les fonctionnalités clés de suivi et d’expédition des colis, la recherche de points relais et la gestion des informations clients.",
+      "description_en": "Participation in the major redesign of DPD’s web platform, using Symfony 6 for the backend and PostgreSQL as the database. The project involved modernizing key features such as parcel tracking, shipping management, relay point search, and customer information pages.",
+      "tech": [
+        "PHP",
+        "Symfony 6",
+        "JavaScript",
+        "Bootstrap",
+        "PostgreSQL"
+
+      ],
+      "image": "/images/dpd-france.png",
+      "github": "",
+      "live": "https://www.dpd.com/fr/fr/",
+      "category": "web",
+      "features_fr": [
+        "Traçabilité et suivi des colis",
+        "Recherche et intégration de points relais",
+        "Tableau de bord administrateur pour la gestion des livraisons et des utilisateurs",
+        "Historique et gestion des processus de livraison",
+        "Authentification et gestion des autorisations",
+        "Pages d’informations clients"
+      ],
+      "features_en": [
+        "Parcel tracking and shipment monitoring",
+        "Relay point search and integration",
+        "Admin dashboard for managing deliveries and users",
+        "Delivery history and process management",
+        "User authentication and authorization",
+        "Customer information pages"
+      ],
+      "duration_fr": "4 mois",
+      "duration_en": "4 months",
+      "team_fr": "Équipe de 3 développeurs",
+      "team_en": "Team of 3 developers",
+      "role_fr": "Développeur Full-Stack",
+      "role_en": "Full-Stack Developer",
+      "challenges_fr": "Le défi principal a été de mettre en place une nouvelle architecture tout en maintenant certaines parties existantes, afin de garantir la continuité des services tout en améliorant significativement l’expérience utilisateur.",
+      "challenges_en": "The main challenge was to implement a new architecture while maintaining parts of the existing system, ensuring service continuity while significantly improving the user experience.",
+      "longDescription_fr": "Ce projet avait pour objectif de moderniser la plateforme web de DPD afin d’améliorer l’efficacité opérationnelle et l’expérience utilisateur. Développée avec Symfony 6, Bootstrap et PostgreSQL, la solution a introduit de nouvelles fonctionnalités de suivi et de gestion des livraisons, tout en intégrant des modules existants. La mission a nécessité une coordination étroite au sein d’une équipe de 3 développeurs, avec un accent sur la performance, la sécurité et l’ergonomie.",
+      "longDescription_en": "The goal of this project was to modernize DPD’s web platform to improve operational efficiency and user experience. Built with Symfony 6, Bootstrap, and PostgreSQL, the solution introduced new features for parcel tracking and delivery management while integrating existing modules. The mission required close collaboration within a 3-developer team, with a strong focus on performance, security, and usability."
+    },
+    {
+      "title_fr": "PaP Pédiatrie - Plateforme Symfony",
+      "title_en": "PaP Pediatrics - Symfony Platform",
+      "description_fr": "Développement d’une plateforme de gestion de contenu médical pédiatrique moderne avec Symfony 7.3. Le projet inclut une interface d’administration avancée, un éditeur WYSIWYG riche, un système de cookies conforme RGPD et une gestion SEO optimisée.",
+      "description_en": "Development of a modern pediatric medical content management platform using Symfony 7.3. The project includes an advanced administration interface, a rich WYSIWYG editor, a GDPR-compliant cookie system, and optimized SEO management.",
+      "tech": [
+        "PHP",
+        "Symfony 7.3",
+        "Bootstrap",
+        "jQuery",
+        "MySQL",
+        "PHPUnit",
+        "PHPStan",
+        "Infection"
+      ],
+      "image": "/images/pap-admin.png",
+      "github": "",
+      "live": "",
+      "category": "web",
+      "features_fr": [
+        "Interface d’administration complète avec statistiques en temps réel",
+        "Gestion des articles avec éditeur WYSIWYG Summernote",
+        "Gestion des auteurs, thèmes, années et pages statiques",
+        "Éditeur riche avec upload d’images, pièces jointes PDF et lightbox",
+        "Système de cookies conforme RGPD avec consentement explicite",
+        "Authentification sécurisée et gestion des rôles",
+        "SEO avancé avec codes de tracking configurables",
+        "Recherche et filtres AJAX performants"
+      ],
+      "features_en": [
+        "Full administration interface with real-time statistics",
+        "Article management with Summernote WYSIWYG editor",
+        "Management of authors, themes, years, and static pages",
+        "Rich editor with image upload, PDF attachments, and lightbox",
+        "GDPR-compliant cookie system with explicit consent",
+        "Secure authentication and role management",
+        "Advanced SEO with configurable tracking codes",
+        "Efficient AJAX search and filtering"
+      ],
+      "duration_fr": "3 semaines",
+      "duration_en": "3 weeks",
+      "team_fr": "Projet individuel",
+      "team_en": "Individual project",
+      "role_fr": "Développeur Full-Stack",
+      "role_en": "Full-Stack Developer",
+      "challenges_fr": "Le principal défi était de concevoir une plateforme robuste et sécurisée intégrant des fonctionnalités avancées (éditeur riche, conformité RGPD, SEO) tout en maintenant un code maintenable et conforme aux standards PSR-12.",
+      "challenges_en": "The main challenge was to design a robust and secure platform integrating advanced features (rich editor, GDPR compliance, SEO) while keeping the codebase maintainable and aligned with PSR-12 standards.",
+      "longDescription_fr": "PaP Pédiatrie est une solution complète de gestion de contenu médical pédiatrique. Construit avec Symfony 7.3, le projet offre une interface d’administration moderne basée sur AdminLTE et Bootstrap 5. Les éditeurs disposent d’un WYSIWYG avancé (Summernote) avec gestion d’images, pièces jointes PDF et formats enrichis. Le système de cookies est strictement conforme au RGPD avec consentement explicite et gestion granulaire. La plateforme intègre également une gestion avancée des utilisateurs et rôles, une optimisation SEO, des statistiques en temps réel et un moteur de recherche performant. Le projet met en avant des standards de qualité élevés via les tests (PHPUnit, tests de mutation avec Infection) et l’analyse statique (PHPStan).",
+      "longDescription_en": "PaP Pediatrics is a comprehensive pediatric medical content management solution. Built with Symfony 7.3, the project features a modern administration interface powered by AdminLTE and Bootstrap 5. Editors benefit from an advanced WYSIWYG editor (Summernote) with image uploads, PDF attachments, and rich formatting. The cookie system is fully GDPR-compliant with explicit consent and granular management. The platform also includes advanced user and role management, SEO optimization, real-time statistics, and a powerful search engine. High code quality standards are enforced through unit/integration testing (PHPUnit, Infection) and static analysis (PHPStan)."
+    }
+    
+  ]
+}
