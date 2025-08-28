@@ -10,6 +10,7 @@ import BackToTop from './components/BackToTop';
 import {useLocalStorage} from './hooks';
 import type {Language} from './types';
 import {useEffect, useMemo, useState} from 'react';
+import { resolvePath, getBasePath } from './utils/paths';
 
 export default function App() {
     const [isDarkMode, setIsDarkMode] = useLocalStorage<boolean>('theme-dark', true);
@@ -31,17 +32,17 @@ export default function App() {
 
     // Load i18n and data JSON from public
     useEffect(() => {
-        fetch('/datas/i18n.json')
+        fetch(resolvePath('datas/i18n.json'))
             .then(r => r.json())
             .then((all) => setT(all[language] || all['fr'] || {}))
             .catch(() => setT({}));
 
-        fetch('/datas/data-timeline.json')
+        fetch(resolvePath('datas/data-timeline.json'))
             .then(r => r.json())
             .then(j => setTimelineRaw(j.timeline || []))
             .catch(() => setTimelineRaw([]));
 
-        fetch('/datas/data-projects.json')
+        fetch(resolvePath('datas/data-projects.json'))
             .then(r => r.json())
             .then(j => setProjectsRaw(j.projects || []))
             .catch(() => setProjectsRaw([]));
@@ -91,14 +92,15 @@ export default function App() {
         const head = document.head;
         const existing = Array.from(head.querySelectorAll('link[rel="alternate"][hreflang]'));
         existing.forEach((el) => el.parentElement?.removeChild(el));
+        const basePath = getBasePath();
         const en = document.createElement('link');
         en.setAttribute('rel', 'alternate');
         en.setAttribute('hreflang', 'en');
-        en.setAttribute('href', '/');
+        en.setAttribute('href', basePath);
         const fr = document.createElement('link');
         fr.setAttribute('rel', 'alternate');
         fr.setAttribute('hreflang', 'fr');
-        fr.setAttribute('href', '/fr');
+        fr.setAttribute('href', basePath + 'fr');
         head.appendChild(en);
         head.appendChild(fr);
     }, [language]);
