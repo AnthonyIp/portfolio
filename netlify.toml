@@ -7,11 +7,6 @@
   to = "/index.html"
   status = 200
 
-[headers]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
 # Configuration pour Netlify Forms avec sécurité renforcée
 [forms]
   [forms.contact]
@@ -27,7 +22,12 @@
   subject = "Nouveau message de contact - Portfolio"
   template = "contact-form"
 
-# Headers de sécurité
+# Headers de sécurité et cache unifiés
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 [[headers]]
   for = "/*"
   [headers.values]
@@ -37,10 +37,9 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none';"
 
-# Protection contre les attaques par déni de service
 [[headers]]
   for = "/"
   [headers.values]
-    X-RateLimit-Limit = "10"
-    X-RateLimit-Remaining = "9"
+    X-RateLimit-Limit = "5"
+    X-RateLimit-Remaining = "4"
     X-RateLimit-Reset = "3600"
