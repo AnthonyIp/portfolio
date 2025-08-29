@@ -1,7 +1,6 @@
 import {Github, Linkedin, Mail, Phone} from 'lucide-react';
 import {useState} from 'react';
 import Toast from './Toast';
-import { Resend } from 'resend';
 
 type Props = {
     isDarkMode: boolean;
@@ -154,132 +153,25 @@ export function Contact({isDarkMode, title, subtitle, labels, isFr}: Props) {
             message: sanitizeInput(formData.message),
         };
 
-        // 4) Envoi via Resend avec sécurité maximale
+        // 4) Envoi via fonction Netlify sécurisée
         try {
-            const resend = new Resend(process.env.RESEND_API_KEY || 'your_resend_api_key_here');
-            
-            const { data, error } = await resend.emails.send({
-                from: 'Portfolio <noreply@anthony-ip.netlify.app>',
-                to: ['anthonyip.pro8@gmail.com'],
-                subject: 'Nouveau message de contact - Portfolio',
-                html: `
-                    <!DOCTYPE html>
-                    <html lang="fr">
-                    <head>
-                        <meta charset="utf-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>Nouveau message de contact</title>
-                        <style>
-                            body { 
-                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-                                line-height: 1.6; 
-                                color: #333; 
-                                margin: 0; 
-                                padding: 0; 
-                                background-color: #f5f5f5;
-                            }
-                            .container { 
-                                max-width: 600px; 
-                                margin: 20px auto; 
-                                background: white; 
-                                border-radius: 12px; 
-                                overflow: hidden; 
-                                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                            }
-                            .header { 
-                                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                                color: white; 
-                                padding: 30px 20px; 
-                                text-align: center; 
-                            }
-                            .header h1 { 
-                                margin: 0; 
-                                font-size: 24px; 
-                                font-weight: 600;
-                            }
-                            .header p { 
-                                margin: 10px 0 0 0; 
-                                opacity: 0.9; 
-                                font-size: 16px;
-                            }
-                            .content { 
-                                padding: 30px 20px; 
-                            }
-                            .field { 
-                                margin-bottom: 20px; 
-                            }
-                            .label { 
-                                font-weight: 600; 
-                                color: #555; 
-                                margin-bottom: 8px; 
-                                display: block;
-                            }
-                            .value { 
-                                background: #f8f9fa; 
-                                padding: 15px; 
-                                border-left: 4px solid #667eea; 
-                                border-radius: 4px;
-                                word-wrap: break-word;
-                            }
-                            .footer { 
-                                text-align: center; 
-                                margin-top: 30px; 
-                                padding-top: 20px; 
-                                border-top: 1px solid #eee; 
-                                color: #666; 
-                                font-size: 14px; 
-                            }
-                            .security-note {
-                                background: #e8f5e8;
-                                border: 1px solid #4caf50;
-                                border-radius: 6px;
-                                padding: 15px;
-                                margin-top: 20px;
-                                color: #2e7d32;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="container">
-                            <div class="header">
-                                <h1>📧 Nouveau message de contact</h1>
-                                <p>Portfolio Anthony IP</p>
-                            </div>
-                            
-                            <div class="content">
-                                <div class="field">
-                                    <span class="label">👤 Nom :</span>
-                                    <div class="value">${sanitizedData.name}</div>
-                                </div>
-                                
-                                <div class="field">
-                                    <span class="label">📧 Email :</span>
-                                    <div class="value">${sanitizedData.email}</div>
-                                </div>
-                                
-                                <div class="field">
-                                    <span class="label">💬 Message :</span>
-                                    <div class="value">${sanitizedData.message}</div>
-                                </div>
-                                
-                                <div class="security-note">
-                                    <strong>🔒 Sécurité :</strong> Ce message a été validé et sécurisé avant envoi.
-                                </div>
-                                
-                                <div class="footer">
-                                    <p>Envoyé depuis votre portfolio via Resend sécurisé</p>
-                                    <p>Date : ${new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </body>
-                    </html>
-                `,
-                replyTo: sanitizedData.email
+            const response = await fetch('/.netlify/functions/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: sanitizedData.name,
+                    email: sanitizedData.email,
+                    message: sanitizedData.message,
+                    honeypot: honeypot
+                })
             });
 
-            if (error) {
-                console.error('Resend error:', error);
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                console.error('Email sending error:', result);
                 setToast({
                     isVisible: true,
                     type: 'error',
@@ -296,11 +188,11 @@ export function Contact({isDarkMode, title, subtitle, labels, isFr}: Props) {
                 setHoneypot(''); // Reset honeypot
             }
         } catch (error) {
-            console.error('Resend error:', error);
+            console.error('Network error:', error);
             setToast({
                 isVisible: true,
                 type: 'error',
-                message: isFr ? 'Erreur lors de l\'envoi du message.' : 'Error sending message.'
+                message: isFr ? 'Erreur de connexion. Veuillez réessayer.' : 'Connection error. Please try again.'
             });
         } finally {
             setIsSubmitting(false);
