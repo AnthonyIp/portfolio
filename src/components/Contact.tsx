@@ -98,76 +98,94 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
     };
 
     // Validation complète du formulaire
-    const validateForm = (): boolean => {
-        const newErrors = {
-            name: validateField('name', formData.name),
-            email: validateField('email', formData.email),
-            message: validateField('message', formData.message)
-        };
+    // const validateForm = (): boolean => {
+    //     const newErrors = {
+    //         name: validateField('name', formData.name),
+    //         email: validateField('email', formData.email),
+    //         message: validateField('message', formData.message)
+    //     };
+    //
+    //     setErrors(newErrors);
+    //
+    //     // Vérifier s'il y a des erreurs
+    //     return !Object.values(newErrors).some(error => error !== '');
+    // };
 
+    const encode = (data: Record<string, string>) =>
+        Object.keys(data)
+            .map((k) => encodeURIComponent(k) + "=" + encodeURIComponent(data[k]))
+            .join("&");
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        // 1) validation immédiate
+        const newErrors = {
+            name: validateField("name", formData.name),
+            email: validateField("email", formData.email),
+            message: validateField("message", formData.message),
+        };
         setErrors(newErrors);
 
-        // Vérifier s'il y a des erreurs
-        return !Object.values(newErrors).some(error => error !== '');
-    };
+        const firstErrorKey = (Object.entries(newErrors).find(([, err]) => err) || [])[0] as
+            | "name"
+            | "email"
+            | "message"
+            | undefined;
 
-    // Gestion de la soumission du formulaire
-    const handleSubmit = (e: React.FormEvent) => {
-        // Validation avant envoi
-        if (!validateForm()) {
-            e.preventDefault();
-            
-            // Trouver le premier champ avec une erreur pour le focus
-            const firstErrorField = Object.entries(errors).find(([_, error]) => error !== '');
-            if (firstErrorField) {
-                const fieldName = firstErrorField[0];
-                const fieldElement = document.getElementById(fieldName);
-                if (fieldElement) {
-                    fieldElement.focus();
-                }
-            }
-
+        if (firstErrorKey) {
+            document.getElementById(firstErrorKey)?.focus();
             setToast({
                 isVisible: true,
-                type: 'error',
-                message: isFr ? 'Veuillez corriger les erreurs dans le formulaire.' : 'Please fix the form errors.'
+                type: "error",
+                message: isFr ? "Veuillez corriger les erreurs dans le formulaire." : "Please fix the form errors.",
             });
             return;
         }
 
-        // Protection contre la soumission multiple
-        if (isSubmitting) {
-            e.preventDefault();
-            return;
-        }
-
-        // Activer l'état de chargement
+        if (isSubmitting) return;
         setIsSubmitting(true);
 
-        // Nettoyer et valider les données
+        // 2) nettoyage
         const sanitizedData = {
-            name: formData.name.trim().replace(/[<>]/g, '').replace(/[&]/g, '&amp;'),
-            email: formData.email.trim().toLowerCase().replace(/[<>]/g, '').replace(/[&]/g, '&amp;'),
-            message: formData.message.trim().replace(/[<>]/g, '').replace(/[&]/g, '&amp;')
+            name: formData.name.trim().replace(/[<>]/g, "").replace(/&/g, "&amp;"),
+            email: formData.email.trim().toLowerCase().replace(/[<>]/g, "").replace(/&/g, "&amp;"),
+            message: formData.message.trim().replace(/[<>]/g, "").replace(/&/g, "&amp;"),
         };
-
-        // Mettre à jour le formulaire avec les données nettoyées
         setFormData(sanitizedData);
 
-        // Netlify Forms gère automatiquement l'envoi
-        // Afficher le toast de succès après un délai
-        setTimeout(() => {
-            setToast({
-                isVisible: true,
-                type: 'success',
-                message: isFr ? 'Message envoyé avec succès !' : 'Message sent successfully!'
-            });
-            
-            // Réinitialiser le formulaire et les erreurs
-            setFormData({name: '', email: '', message: ''});
-            setErrors({name: '', email: '', message: ''});
-            setIsSubmitting(false);
-        }, 2000);
+        // 3) envoi Netlify Forms
+        const payload = {
+            "form-name": "contact",
+            name: sanitizedData.name,
+            email: sanitizedData.email,
+            message: sanitizedData.message,
+            "bot-field": "", // si tu gardes le honeypot
+        };
+
+        fetch("/", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: encode(payload),
+        })
+            .then((r) => {
+                if (!r.ok) throw new Error("Netlify Forms returned non-200");
+                setToast({
+                    isVisible: true,
+                    type: "success",
+                    message: isFr ? "Message envoyé avec succès !" : "Message sent successfully!",
+                });
+                setFormData({ name: "", email: "", message: "" });
+                setErrors({ name: "", email: "", message: "" });
+            })
+            .catch(() => {
+                setToast({
+                    isVisible: true,
+                    type: "error",
+                    message: isFr ? "Erreur lors de l'envoi du message." : "Error sending message.",
+                });
+            })
+            .finally(() => setIsSubmitting(false));
     };
 
     // Fermer le toast
