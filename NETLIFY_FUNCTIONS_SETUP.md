@@ -16,9 +16,19 @@ RESEND_API_KEY = votre_clé_api_resend_ici
 
 ### 2. Configuration des Fonctions
 
-Les fonctions sont automatiquement déployées avec votre site. Assurez-vous que votre `netlify.toml` contient :
+Les fonctions sont automatiquement déployées avec votre site. Votre `netlify.toml` contient déjà :
 
 ```toml
 [build]
   functions = "netlify/functions"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
 ```
+
+### 3. Dépendances
+
+Toutes les dépendances nécessaires sont installées dans le package.json principal :
+- `resend` - Pour l'envoi d'emails
+- `@react-email/render` - Dépendance requise par Resend
