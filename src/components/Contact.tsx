@@ -113,11 +113,11 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
     };
 
         // Gestion de la soumission du formulaire
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        
+    const handleSubmit = (e: React.FormEvent) => {
         // Validation avant envoi
         if (!validateForm()) {
+            e.preventDefault();
+            
             // Trouver le premier champ avec une erreur pour le focus
             const firstErrorField = Object.entries(errors).find(([_, error]) => error !== '');
             if (firstErrorField) {
@@ -137,63 +137,37 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
         }
 
         // Protection contre la soumission multiple
-        if (isSubmitting) return;
+        if (isSubmitting) {
+            e.preventDefault();
+            return;
+        }
         
         setIsSubmitting(true);
 
-        try {
-            // Nettoyer et valider les données
-            const sanitizedData = {
-                name: formData.name.trim().replace(/[<>]/g, '').replace(/[&]/g, '&amp;'),
-                email: formData.email.trim().toLowerCase().replace(/[<>]/g, '').replace(/[&]/g, '&amp;'),
-                message: formData.message.trim().replace(/[<>]/g, '').replace(/[&]/g, '&amp;')
-            };
+        // Nettoyer et valider les données
+        const sanitizedData = {
+            name: formData.name.trim().replace(/[<>]/g, '').replace(/[&]/g, '&amp;'),
+            email: formData.email.trim().toLowerCase().replace(/[<>]/g, '').replace(/[&]/g, '&amp;'),
+            message: formData.message.trim().replace(/[<>]/g, '').replace(/[&]/g, '&amp;')
+        };
 
-            // Créer les données du formulaire pour Netlify
-            const formDataToSend = new FormData();
-            formDataToSend.append('form-name', 'contact');
-            formDataToSend.append('name', sanitizedData.name);
-            formDataToSend.append('email', sanitizedData.email);
-            formDataToSend.append('message', sanitizedData.message);
+        // Mettre à jour le formulaire avec les données nettoyées
+        setFormData(sanitizedData);
 
-            // Envoyer via Netlify Forms
-            const response = await fetch('/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams(formDataToSend as any).toString(),
-            });
-
-            if (response.ok) {
-                // Succès
-                setToast({
-                    isVisible: true,
-                    type: 'success',
-                    message: isFr ? 'Message envoyé avec succès !' : 'Message sent successfully!'
-                });
-                
-                // Réinitialiser le formulaire et les erreurs
-                setFormData({name: '', email: '', message: ''});
-                setErrors({name: '', email: '', message: ''});
-            } else {
-                // Erreur HTTP
-                setToast({
-                    isVisible: true,
-                    type: 'error',
-                    message: isFr ? 'Erreur lors de l\'envoi du message.' : 'Error sending message.'
-                });
-            }
-        } catch (error) {
-            // Erreur réseau
+        // Laisser Netlify gérer la soumission native
+        // Afficher le toast de succès après un délai
+        setTimeout(() => {
             setToast({
                 isVisible: true,
-                type: 'error',
-                message: isFr ? 'Erreur de connexion. Veuillez réessayer.' : 'Connection error. Please try again.'
+                type: 'success',
+                message: isFr ? 'Message envoyé avec succès !' : 'Message sent successfully!'
             });
-        } finally {
+            
+            // Réinitialiser le formulaire et les erreurs
+            setFormData({name: '', email: '', message: ''});
+            setErrors({name: '', email: '', message: ''});
             setIsSubmitting(false);
-        }
+        }, 1000);
     };
 
     // Fermer le toast
@@ -255,7 +229,6 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                              method="POST"
                              data-netlify="true"
                              data-netlify-honeypot="bot-field"
-                             data-netlify-recaptcha="true"
                              onSubmit={handleSubmit}
                              className="space-y-6"
                          >
