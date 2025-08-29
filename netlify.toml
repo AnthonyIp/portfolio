@@ -12,6 +12,8 @@
   [forms.contact]
     name = "contact"
     method = "POST"
+    # Empêcher la redirection - rester sur la même page
+    action = "/"
     
 # Configuration des notifications par email
 [[forms.contact.notifications]]
