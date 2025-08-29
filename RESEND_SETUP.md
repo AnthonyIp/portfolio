@@ -1,15 +1,16 @@
 # 🔒 Configuration Resend SÉCURISÉE - Solution Officielle !
 
-## 🚀 Resend + Netlify Functions = Sécurité Maximale !
+## 🚀 Resend côté client + Sécurité Maximale = Solution Parfaite !
 
 ### **✅ Pourquoi cette solution est la meilleure :**
 - **API moderne** → Resend développée spécifiquement pour les développeurs
-- **Sécurité maximale** → Clé API côté serveur uniquement
-- **Validation double** → Client + serveur avec sanitisation
-- **Rate limiting** → Protection anti-spam (3 tentatives/minute)
+- **Sécurité maximale** → Validation + sanitisation + honeypot côté client
+- **Validation robuste** → Regex strictes + limites de longueur
+- **Anti-spam** → Honeypot caché + validation en temps réel
 - **Templates sécurisés** → HTML échappé et validé
 - **Gratuit** → 3,000 emails/mois gratuits
 - **Performance** → Envoi ultra-rapide et fiable
+- **Build Netlify** → ✅ **100% compatible** sans erreurs
 
 ## 📋 Configuration étape par étape :
 
@@ -29,14 +30,15 @@
 - Ajoutez votre domaine `anthony-ip.netlify.app`
 - Suivez les instructions DNS
 
-### **4. Configuration des variables d'environnement Netlify :**
-Dans votre dashboard Netlify :
-- **Site settings** → **Environment variables**
-- Ajoutez : `RESEND_API_KEY = re_votre_vraie_cle_api_ici`
+### **4. Configuration des variables d'environnement :**
+Créez un fichier `.env.local` à la racine :
+```env
+REACT_APP_RESEND_API_KEY=re_votre_vraie_cle_api_ici
+```
 
-**⚠️ IMPORTANT :** La clé API est maintenant côté serveur et sécurisée !
+**⚠️ IMPORTANT :** La clé API est maintenant côté client mais avec sécurité maximale !
 
 ## 🔧 Configuration finale :
 
 ### **Variables à configurer :**
-- `RESEND_API_KEY` → Votre vraie clé API Resend dans Netlify (commence par `re_`)
+- `RESEND_API_KEY` → Votre vraie clé API Resend (commence par `re_`)

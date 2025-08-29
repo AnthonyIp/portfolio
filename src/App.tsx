@@ -3,7 +3,7 @@ import Hero from './components/Hero';
 import About from './components/About';
 import Timeline from './components/Timeline';
 import { Projects } from './components/projects/Projects';
-import Contact from './components/Contact';
+import { Contact } from './components/Contact';
 import Footer from './components/Footer';
 import ParticlesBackground from './components/ParticlesBackground';
 import BackToTop from './components/BackToTop';
@@ -16,6 +16,7 @@ export default function App() {
     // default FR; if no saved language, detect browser -> fr else en
     const [language, setLanguage] = useLocalStorage<Language>('lang', 'fr');
     const [t, setT] = useState<any>({});
+    const isFr = language === 'fr';
     const [timelineRaw, setTimelineRaw] = useState<any[]>([]);
     const [projectsRaw, setProjectsRaw] = useState<any[]>([]);
 
@@ -176,7 +177,7 @@ export default function App() {
                         language={language}
                     />
                     <Contact isDarkMode={isDarkMode} title={t.contact?.title} subtitle={t.contact?.subtitle}
-                             labels={t.contact || {}}/>
+                             labels={t.contact || {}} isFr={isFr}/>
                 </main>
                 <Footer isDarkMode={isDarkMode} text={t.footer || ''}/>
                 <BackToTop isDarkMode={isDarkMode}/>

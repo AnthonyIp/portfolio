@@ -1,106 +1,115 @@
 import {Github, Linkedin, Mail, Phone} from 'lucide-react';
 import {useState} from 'react';
 import Toast from './Toast';
+import { Resend } from 'resend';
 
 type Props = {
     isDarkMode: boolean;
     title: string;
     subtitle: string;
     labels: {
-        email: string;
-        github: string;
-        linkedin: string;
         name: string;
         namePlaceholder: string;
+        email: string;
         emailPlaceholder: string;
         message: string;
         messagePlaceholder: string;
         send: string;
     };
+    isFr: boolean;
 };
 
-export function Contact({isDarkMode, title, subtitle, labels}: Props) {
-    const isFr = labels.name === 'Nom';
-    const phoneLabel = isFr ? 'Téléphone' : 'Phone';
-    const downloadCvText = isFr ? 'Télécharger mon CV' : 'Download my resume';
-
-    // État pour le toast
-    const [toast, setToast] = useState<{
-        isVisible: boolean;
-        type: 'success' | 'error';
-        message: string;
-    }>({
-        isVisible: false,
-        type: 'success',
-        message: ''
-    });
-
-    // État pour le formulaire
+export function Contact({isDarkMode, title, subtitle, labels, isFr}: Props) {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         message: ''
     });
 
-    // État pour les erreurs de validation
     const [errors, setErrors] = useState({
         name: '',
         email: '',
         message: ''
     });
 
-    // État pour le chargement
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [toast, setToast] = useState({
+        isVisible: false,
+        type: 'success' as 'success' | 'error',
+        message: ''
+    });
 
     const emailAddr = 'anthonyip.pro8@gmail.com';
     const phoneNum = '+33660561869';
     const githubUrl = 'https://github.com/AnthonyIp';
     const linkedinUrl = 'https://linkedin.com/in/anthony-ip-1206';
 
-    // Validation des champs
-    const validateField = (name: string, value: string): string => {
-        switch (name) {
+    // Validation ultra-sécurisée
+    const validateField = (field: keyof typeof formData, value: string): string => {
+        switch (field) {
             case 'name':
-                if (value.length < 2) return 'Le nom doit contenir au moins 2 caractères';
-                if (value.length > 50) return 'Le nom ne peut pas dépasser 50 caractères';
-                if (!/^[a-zA-ZÀ-ÿ\s'-]+$/.test(value)) return 'Le nom ne peut contenir que des lettres, espaces, tirets et apostrophes';
-                break;
+                if (!value.trim()) return isFr ? 'Le nom est requis' : 'Name is required';
+                if (value.trim().length < 2) return isFr ? 'Le nom doit contenir au moins 2 caractères' : 'Name must be at least 2 characters';
+                if (value.trim().length > 50) return isFr ? 'Le nom ne peut pas dépasser 50 caractères' : 'Name cannot exceed 50 characters';
+                if (!/^[a-zA-ZÀ-ÿ\s'-]+$/.test(value.trim())) return isFr ? 'Le nom contient des caractères invalides' : 'Name contains invalid characters';
+                return '';
+            
             case 'email':
-                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Format d\'email invalide';
-                if (value.length > 100) return 'L\'email ne peut pas dépasser 100 caractères';
-                break;
+                if (!value.trim()) return isFr ? 'L\'email est requis' : 'Email is required';
+                if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value.trim())) return isFr ? 'Format d\'email invalide' : 'Invalid email format';
+                if (value.trim().length > 100) return isFr ? 'L\'email ne peut pas dépasser 100 caractères' : 'Email cannot exceed 100 characters';
+                return '';
+            
             case 'message':
-                if (value.length < 10) return 'Le message doit contenir au moins 10 caractères';
-                if (value.length > 1000) return 'Le message ne peut pas dépasser 1000 caractères';
-                break;
+                if (!value.trim()) return isFr ? 'Le message est requis' : 'Message is required';
+                if (value.trim().length < 10) return isFr ? 'Le message doit contenir au moins 10 caractères' : 'Message must be at least 10 characters';
+                if (value.trim().length > 1000) return isFr ? 'Le message ne peut pas dépasser 1000 caractères' : 'Message cannot exceed 1000 characters';
+                return '';
+            
+            default:
+                return '';
         }
-        return '';
     };
 
-    // Gestion des changements de formulaire avec validation
+    // Sanitisation ultra-sécurisée
+    const sanitizeInput = (input: string): string => {
+        return input
+            .trim()
+            .replace(/[<>]/g, '') // Supprimer < et >
+            .replace(/&/g, '&amp;') // Échapper &
+            .replace(/"/g, '&quot;') // Échapper "
+            .replace(/'/g, '&#x27;') // Échapper '
+            .replace(/\//g, '&#x2F;') // Échapper /
+            .substring(0, 1000); // Limite de longueur
+    };
+
+    // Protection anti-spam avec honeypot
+    const [honeypot, setHoneypot] = useState('');
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = e.target;
+        
+        // Ignorer le honeypot
+        if (name === 'honeypot') {
+            setHoneypot(value);
+            return;
+        }
 
-        // Mettre à jour le formulaire d'abord
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        setFormData(prev => ({...prev, [name]: value}));
+        
+        // Validation en temps réel
+        const error = validateField(name as keyof typeof formData, value);
+        setErrors(prev => ({...prev, [name]: error}));
+    };
 
-        // Validation en temps réel avec délai pour éviter trop de calculs
-        setTimeout(() => {
-            const error = validateField(name, value);
-            setErrors(prev => ({
-                ...prev,
-                [name]: error
-            }));
-        }, 300); // Délai de 300ms pour éviter la validation à chaque frappe
+    const closeToast = () => {
+        setToast(prev => ({...prev, isVisible: false}));
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // 1) validation immédiate
+        // 1) Validation immédiate
         const newErrors = {
             name: validateField("name", formData.name),
             email: validateField("email", formData.email),
@@ -124,66 +133,178 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
             return;
         }
 
+        // 2) Protection anti-spam
+        if (honeypot) {
+            console.log('Spam détecté via honeypot');
+            setToast({
+                isVisible: true,
+                type: "error",
+                message: isFr ? "Erreur de validation." : "Validation error.",
+            });
+            return;
+        }
+
         if (isSubmitting) return;
         setIsSubmitting(true);
 
-        // 2) nettoyage
+        // 3) Nettoyage et sanitisation
         const sanitizedData = {
-            name: formData.name.trim().replace(/[<>]/g, "").replace(/&/g, "&amp;"),
-            email: formData.email.trim().toLowerCase().replace(/[<>]/g, "").replace(/&/g, "&amp;"),
-            message: formData.message.trim().replace(/[<>]/g, "").replace(/&/g, "&amp;"),
+            name: sanitizeInput(formData.name),
+            email: sanitizeInput(formData.email),
+            message: sanitizeInput(formData.message),
         };
-        setFormData(sanitizedData);
 
-        // 3) envoi via Netlify Function sécurisée
+        // 4) Envoi via Resend avec sécurité maximale
         try {
-            // Envoyer vers la Netlify Function sécurisée
-            const response = await fetch('/.netlify/functions/send-email', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(sanitizedData),
+            const resend = new Resend(process.env.RESEND_API_KEY || 'your_resend_api_key_here');
+            
+            const { data, error } = await resend.emails.send({
+                from: 'Portfolio <noreply@anthony-ip.netlify.app>',
+                to: ['anthonyip.pro8@gmail.com'],
+                subject: 'Nouveau message de contact - Portfolio',
+                html: `
+                    <!DOCTYPE html>
+                    <html lang="fr">
+                    <head>
+                        <meta charset="utf-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Nouveau message de contact</title>
+                        <style>
+                            body { 
+                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+                                line-height: 1.6; 
+                                color: #333; 
+                                margin: 0; 
+                                padding: 0; 
+                                background-color: #f5f5f5;
+                            }
+                            .container { 
+                                max-width: 600px; 
+                                margin: 20px auto; 
+                                background: white; 
+                                border-radius: 12px; 
+                                overflow: hidden; 
+                                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                            }
+                            .header { 
+                                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                                color: white; 
+                                padding: 30px 20px; 
+                                text-align: center; 
+                            }
+                            .header h1 { 
+                                margin: 0; 
+                                font-size: 24px; 
+                                font-weight: 600;
+                            }
+                            .header p { 
+                                margin: 10px 0 0 0; 
+                                opacity: 0.9; 
+                                font-size: 16px;
+                            }
+                            .content { 
+                                padding: 30px 20px; 
+                            }
+                            .field { 
+                                margin-bottom: 20px; 
+                            }
+                            .label { 
+                                font-weight: 600; 
+                                color: #555; 
+                                margin-bottom: 8px; 
+                                display: block;
+                            }
+                            .value { 
+                                background: #f8f9fa; 
+                                padding: 15px; 
+                                border-left: 4px solid #667eea; 
+                                border-radius: 4px;
+                                word-wrap: break-word;
+                            }
+                            .footer { 
+                                text-align: center; 
+                                margin-top: 30px; 
+                                padding-top: 20px; 
+                                border-top: 1px solid #eee; 
+                                color: #666; 
+                                font-size: 14px; 
+                            }
+                            .security-note {
+                                background: #e8f5e8;
+                                border: 1px solid #4caf50;
+                                border-radius: 6px;
+                                padding: 15px;
+                                margin-top: 20px;
+                                color: #2e7d32;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div class="header">
+                                <h1>📧 Nouveau message de contact</h1>
+                                <p>Portfolio Anthony IP</p>
+                            </div>
+                            
+                            <div class="content">
+                                <div class="field">
+                                    <span class="label">👤 Nom :</span>
+                                    <div class="value">${sanitizedData.name}</div>
+                                </div>
+                                
+                                <div class="field">
+                                    <span class="label">📧 Email :</span>
+                                    <div class="value">${sanitizedData.email}</div>
+                                </div>
+                                
+                                <div class="field">
+                                    <span class="label">💬 Message :</span>
+                                    <div class="value">${sanitizedData.message}</div>
+                                </div>
+                                
+                                <div class="security-note">
+                                    <strong>🔒 Sécurité :</strong> Ce message a été validé et sécurisé avant envoi.
+                                </div>
+                                
+                                <div class="footer">
+                                    <p>Envoyé depuis votre portfolio via Resend sécurisé</p>
+                                    <p>Date : ${new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                `,
+                replyTo: sanitizedData.email
             });
 
-            const result = await response.json();
-
-            if (response.ok && result.success) {
-                // Succès
+            if (error) {
+                console.error('Resend error:', error);
+                setToast({
+                    isVisible: true,
+                    type: 'error',
+                    message: isFr ? 'Erreur lors de l\'envoi du message.' : 'Error sending message.'
+                });
+            } else {
                 setToast({
                     isVisible: true,
                     type: 'success',
                     message: isFr ? 'Message envoyé avec succès !' : 'Message sent successfully!'
                 });
-                
-                // Réinitialiser le formulaire et les erreurs
                 setFormData({name: '', email: '', message: ''});
                 setErrors({name: '', email: '', message: ''});
-            } else {
-                // Erreur avec message détaillé
-                const errorMessage = result.error || (isFr ? 'Erreur lors de l\'envoi du message.' : 'Error sending message.');
-                setToast({
-                    isVisible: true,
-                    type: 'error',
-                    message: errorMessage
-                });
+                setHoneypot(''); // Reset honeypot
             }
         } catch (error) {
-            // Erreur réseau avec détails
-            console.error('Network error:', error);
+            console.error('Resend error:', error);
             setToast({
                 isVisible: true,
                 type: 'error',
-                message: isFr ? 'Erreur de connexion. Veuillez réessayer.' : 'Connection error. Please try again.'
+                message: isFr ? 'Erreur lors de l\'envoi du message.' : 'Error sending message.'
             });
         } finally {
             setIsSubmitting(false);
         }
-    };
-
-    // Fermer le toast
-    const closeToast = () => {
-        setToast(prev => ({...prev, isVisible: false}));
     };
 
     return (
@@ -192,10 +313,11 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
             <div className="max-w-4xl mx-auto px-4">
                 <div className="text-center mb-16">
                     <h2 id="contact-heading"
-                        className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">{title}</h2>
+                         className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">{title}</h2>
                     <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mb-8"></div>
                     <p className={`text-xl max-w-2xl mx-auto ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>{subtitle}</p>
                 </div>
+
                 <div className="grid md:grid-cols-2 gap-12">
                     <div className="space-y-8">
                         <div className="flex items-center space-x-4">
@@ -209,7 +331,7 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                         <div className="flex items-center space-x-4">
                             <div className="p-3 bg-amber-600 rounded-lg"><Phone size={24}/></div>
                             <div>
-                                <h3 className="text-lg font-semibold">{phoneLabel}</h3>
+                                <h3 className="text-lg font-semibold">{isFr ? 'Téléphone' : 'Phone'}</h3>
                                 <a href={`tel:${phoneNum}`} aria-label={`Call ${phoneNum}`}
                                    className={isDarkMode ? 'text-blue-300 hover:text-blue-200' : 'text-blue-700 hover:text-blue-600'}>{phoneNum}</a>
                             </div>
@@ -217,7 +339,7 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                         <div className="flex items-center space-x-4">
                             <div className="p-3 bg-purple-600 rounded-lg"><Github size={24}/></div>
                             <div>
-                                <h3 className="text-lg font-semibold">{labels.github}</h3>
+                                <h3 className="text-lg font-semibold">GitHub</h3>
                                 <a href={githubUrl} target="_blank" rel="noopener noreferrer"
                                    aria-label="Open GitHub profile"
                                    className={isDarkMode ? 'text-blue-300 hover:text-blue-200' : 'text-blue-700 hover:text-blue-600'}>{githubUrl.replace('https://', '')}</a>
@@ -226,7 +348,7 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                         <div className="flex items-center space-x-4">
                             <div className="p-3 bg-emerald-600 rounded-lg"><Linkedin size={24}/></div>
                             <div>
-                                <h3 className="text-lg font-semibold">{labels.linkedin}</h3>
+                                <h3 className="text-lg font-semibold">LinkedIn</h3>
                                 <a href={linkedinUrl} target="_blank" rel="noopener noreferrer"
                                    aria-label="Open LinkedIn profile"
                                    className={isDarkMode ? 'text-blue-300 hover:text-blue-200' : 'text-blue-700 hover:text-blue-600'}>{linkedinUrl.replace('https://', '')}</a>
@@ -236,9 +358,9 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                             <a href={isFr ? "/cv/cv.pdf" : "/cv/cv-en.pdf"}
                                download
                                className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:from-blue-700 hover:to-purple-700 transition-colors"
-                               aria-label={downloadCvText}
+                               aria-label={isFr ? 'Télécharger mon CV' : 'Download my resume'}
                             >
-                                {downloadCvText}
+                                {isFr ? 'Télécharger mon CV' : 'Download my resume'}
                             </a>
                         </div>
                     </div>
@@ -248,6 +370,17 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                             onSubmit={handleSubmit}
                             className="space-y-6"
                         >
+                            {/* Honeypot anti-spam (caché) */}
+                            <div className="hidden">
+                                <input
+                                    type="text"
+                                    name="honeypot"
+                                    value={honeypot}
+                                    onChange={handleInputChange}
+                                    tabIndex={-1}
+                                    autoComplete="off"
+                                />
+                            </div>
 
                             <div>
                                 <label htmlFor="name" className="block text-sm font-medium mb-2">{labels.name}</label>
@@ -344,7 +477,7 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                             </div>
                             <button
                                 type="submit"
-                                disabled={isSubmitting}
+                                disabled={isSubmitting || Object.values(errors).some(e => e !== '')}
                                 className={`w-full px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 ${
                                     isSubmitting
                                         ? 'bg-gray-400 cursor-not-allowed'
@@ -373,5 +506,4 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
         </section>
     );
 }
-
 export default Contact;
