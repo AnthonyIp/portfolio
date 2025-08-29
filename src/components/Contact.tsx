@@ -135,8 +135,9 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
         };
         setFormData(sanitizedData);
 
-        // 3) envoi via Netlify Function + Resend
+        // 3) envoi via Netlify Function sécurisée
         try {
+            // Envoyer vers la Netlify Function sécurisée
             const response = await fetch('/.netlify/functions/send-email', {
                 method: 'POST',
                 headers: {

@@ -1,4 +1,4 @@
-import { Handler, HandlerEvent, HandlerContext } from '@netlify/functions';
+import { Handler, HandlerEvent } from '@netlify/functions';
 import { Resend } from 'resend';
 
 // Types sécurisés
@@ -41,7 +41,7 @@ const validateMessage = (message: string): boolean => {
   return message.length >= 10 && message.length <= 1000;
 };
 
-// Rate limiting simple (en production, utilisez Redis ou similaire)
+// Rate limiting en mémoire (en production, utilisez Redis)
 const rateLimit = new Map<string, { count: number; resetTime: number }>();
 
 const checkRateLimit = (ip: string): boolean => {
@@ -53,7 +53,7 @@ const checkRateLimit = (ip: string): boolean => {
     return true;
   }
   
-  if (limit.count >= 5) { // Max 5 tentatives par minute
+  if (limit.count >= 3) { // Max 3 tentatives par minute
     return false;
   }
   
@@ -190,10 +190,9 @@ const createEmailTemplate = (data: ContactData): string => {
   `;
 };
 
-// Handler principal
+// Handler principal sécurisé
 export const handler: Handler = async (
-  event: HandlerEvent,
-  context: HandlerContext
+  event: HandlerEvent
 ): Promise<{ statusCode: number; body: string }> => {
   try {
     // 1. Vérification de la méthode HTTP
@@ -293,7 +292,7 @@ export const handler: Handler = async (
       };
     }
 
-    // 7. Vérification de la clé API Resend
+    // 7. Vérification de la clé API Resend (côté serveur)
     const resendApiKey = process.env.RESEND_API_KEY;
     if (!resendApiKey) {
       console.error('RESEND_API_KEY environment variable is not set');
@@ -329,7 +328,7 @@ export const handler: Handler = async (
       };
     }
 
-    // 10. Succès
+    // 10. Succès avec logging sécurisé
     console.log('Email sent successfully:', { 
       to: 'anthonyip.pro8@gmail.com', 
       from: sanitizedData.email,
@@ -347,7 +346,7 @@ export const handler: Handler = async (
     };
 
   } catch (error) {
-    // 11. Gestion d'erreur globale
+    // 11. Gestion d'erreur globale sécurisée
     console.error('Unexpected error in send-email function:', error);
     
     return {
