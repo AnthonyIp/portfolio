@@ -206,7 +206,7 @@ Les contributions sont les bienvenues ! N'hésitez pas à :
 
 ## 📞 Contact
 
-- **Email** : **anthonyip@hotmail.fr**
+- **Email** : **<anthonyip.pro8@gmail.com>**
 - **GitHub** : [@AnthonyIp](https://github.com/AnthonyIp)
 - **LinkedIn** : [Anthony IP](https://linkedin.com/in/anthony-ip-1206)
 

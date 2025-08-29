@@ -1,7 +1,6 @@
 import {Github, Linkedin, Mail, Phone} from 'lucide-react';
 import {useState} from 'react';
 import Toast from './Toast';
-import HoneypotField from './HoneypotField';
 
 type Props = {
     isDarkMode: boolean;
@@ -53,7 +52,7 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
     // État pour le chargement
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const emailAddr = 'anthonyip@hotmail.fr';
+    const emailAddr = 'anthonyip.pro8@gmail.com';
     const phoneNum = '+33660561869';
     const githubUrl = 'https://github.com/AnthonyIp';
     const linkedinUrl = 'https://linkedin.com/in/anthony-ip-1206';
@@ -155,7 +154,7 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
         // Mettre à jour le formulaire avec les données nettoyées
         setFormData(sanitizedData);
 
-        // Laisser Netlify gérer la soumission native
+        // Netlify Forms gère automatiquement l'envoi
         // Afficher le toast de succès après un délai
         setTimeout(() => {
             setToast({
@@ -245,8 +244,10 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                             {/* Champ caché pour Netlify */}
                             <input type="hidden" name="form-name" value="contact"/>
 
-                            {/* Honeypot anti-spam */}
-                            <HoneypotField name="bot-field"/>
+                            {/* Honeypot anti-spam caché */}
+                            <div className="hidden">
+                                <input name="bot-field" />
+                            </div>
 
                             <div>
                                 <label htmlFor="name" className="block text-sm font-medium mb-2">{labels.name}</label>
