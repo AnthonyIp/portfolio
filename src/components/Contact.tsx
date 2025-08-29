@@ -114,10 +114,11 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
 
         // Gestion de la soumission du formulaire
     const handleSubmit = (e: React.FormEvent) => {
+        // TOUJOURS prévenir la soumission native
+        e.preventDefault();
+        
         // Validation avant envoi
         if (!validateForm()) {
-            e.preventDefault();
-            
             // Trouver le premier champ avec une erreur pour le focus
             const firstErrorField = Object.entries(errors).find(([_, error]) => error !== '');
             if (firstErrorField) {
@@ -138,7 +139,6 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
 
         // Protection contre la soumission multiple
         if (isSubmitting) {
-            e.preventDefault();
             return;
         }
         
@@ -154,20 +154,53 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
         // Mettre à jour le formulaire avec les données nettoyées
         setFormData(sanitizedData);
 
-        // Laisser Netlify gérer la soumission native
-        // Afficher le toast de succès après un délai
-        setTimeout(() => {
+        // Créer les données du formulaire pour Netlify
+        const formDataToSend = new FormData();
+        formDataToSend.append('form-name', 'contact');
+        formDataToSend.append('name', sanitizedData.name);
+        formDataToSend.append('email', sanitizedData.email);
+        formDataToSend.append('message', sanitizedData.message);
+
+        // Envoyer via Netlify Forms avec fetch
+        fetch('/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(formDataToSend as any).toString(),
+        })
+        .then(response => {
+            if (response.ok) {
+                // Succès
+                setToast({
+                    isVisible: true,
+                    type: 'success',
+                    message: isFr ? 'Message envoyé avec succès !' : 'Message sent successfully!'
+                });
+                
+                // Réinitialiser le formulaire et les erreurs
+                setFormData({name: '', email: '', message: ''});
+                setErrors({name: '', email: '', message: ''});
+            } else {
+                // Erreur HTTP
+                setToast({
+                    isVisible: true,
+                    type: 'error',
+                    message: isFr ? 'Erreur lors de l\'envoi du message.' : 'Error sending message.'
+                });
+            }
+        })
+        .catch(error => {
+            // Erreur réseau
             setToast({
                 isVisible: true,
-                type: 'success',
-                message: isFr ? 'Message envoyé avec succès !' : 'Message sent successfully!'
+                type: 'error',
+                message: isFr ? 'Erreur de connexion. Veuillez réessayer.' : 'Connection error. Please try again.'
             });
-            
-            // Réinitialiser le formulaire et les erreurs
-            setFormData({name: '', email: '', message: ''});
-            setErrors({name: '', email: '', message: ''});
+        })
+        .finally(() => {
             setIsSubmitting(false);
-        }, 1000);
+        });
     };
 
     // Fermer le toast
