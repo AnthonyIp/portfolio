@@ -97,26 +97,7 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
         }, 300); // Délai de 300ms pour éviter la validation à chaque frappe
     };
 
-    // Validation complète du formulaire
-    // const validateForm = (): boolean => {
-    //     const newErrors = {
-    //         name: validateField('name', formData.name),
-    //         email: validateField('email', formData.email),
-    //         message: validateField('message', formData.message)
-    //     };
-    //
-    //     setErrors(newErrors);
-    //
-    //     // Vérifier s'il y a des erreurs
-    //     return !Object.values(newErrors).some(error => error !== '');
-    // };
-
-    const encode = (data: Record<string, string>) =>
-        Object.keys(data)
-            .map((k) => encodeURIComponent(k) + "=" + encodeURIComponent(data[k]))
-            .join("&");
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         // 1) validation immédiate
@@ -154,38 +135,49 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
         };
         setFormData(sanitizedData);
 
-        // 3) envoi Netlify Forms
-        const payload = {
-            "form-name": "contact",
-            name: sanitizedData.name,
-            email: sanitizedData.email,
-            message: sanitizedData.message,
-            "bot-field": "", // si tu gardes le honeypot
-        };
+        // 3) envoi via Netlify Function + Resend
+        try {
+            const response = await fetch('/.netlify/functions/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(sanitizedData),
+            });
 
-        fetch("/", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: encode(payload),
-        })
-            .then((r) => {
-                if (!r.ok) throw new Error("Netlify Forms returned non-200");
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                // Succès
                 setToast({
                     isVisible: true,
-                    type: "success",
-                    message: isFr ? "Message envoyé avec succès !" : "Message sent successfully!",
+                    type: 'success',
+                    message: isFr ? 'Message envoyé avec succès !' : 'Message sent successfully!'
                 });
-                setFormData({ name: "", email: "", message: "" });
-                setErrors({ name: "", email: "", message: "" });
-            })
-            .catch(() => {
+                
+                // Réinitialiser le formulaire et les erreurs
+                setFormData({name: '', email: '', message: ''});
+                setErrors({name: '', email: '', message: ''});
+            } else {
+                // Erreur avec message détaillé
+                const errorMessage = result.error || (isFr ? 'Erreur lors de l\'envoi du message.' : 'Error sending message.');
                 setToast({
                     isVisible: true,
-                    type: "error",
-                    message: isFr ? "Erreur lors de l'envoi du message." : "Error sending message.",
+                    type: 'error',
+                    message: errorMessage
                 });
-            })
-            .finally(() => setIsSubmitting(false));
+            }
+        } catch (error) {
+            // Erreur réseau avec détails
+            console.error('Network error:', error);
+            setToast({
+                isVisible: true,
+                type: 'error',
+                message: isFr ? 'Erreur de connexion. Veuillez réessayer.' : 'Connection error. Please try again.'
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     // Fermer le toast
@@ -252,20 +244,9 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                     <div
                         className={`p-8 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}>
                         <form
-                            name="contact"
-                            method="POST"
-                            data-netlify="true"
-                            data-netlify-honeypot="bot-field"
                             onSubmit={handleSubmit}
                             className="space-y-6"
                         >
-                            {/* Champ caché pour Netlify */}
-                            <input type="hidden" name="form-name" value="contact"/>
-
-                            {/* Honeypot anti-spam caché */}
-                            <div className="hidden">
-                                <input name="bot-field" />
-                            </div>
 
                             <div>
                                 <label htmlFor="name" className="block text-sm font-medium mb-2">{labels.name}</label>

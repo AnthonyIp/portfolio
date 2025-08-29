@@ -7,18 +7,9 @@
   to = "/index.html"
   status = 200
 
-# Configuration pour Netlify Forms avec sécurité renforcée
-[forms]
-  [forms.contact]
-    name = "contact"
-    method = "POST"
-    
-# Configuration des notifications par email
-[[forms.contact.notifications]]
-  type = "email"
-  to = "anthonyip.pro8@gmail.com"
-  from = "noreply@anthony-ip.netlify.app"
-  subject = "Nouveau message de contact - Portfolio"
+# Configuration pour Netlify Functions
+[functions]
+  directory = "netlify/functions"
 
 # Headers de sécurité et cache unifiés
 [[headers]]
