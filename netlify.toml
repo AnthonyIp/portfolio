@@ -16,7 +16,7 @@
 # Configuration des notifications par email
 [[forms.contact.notifications]]
   type = "email"
-  to = "anthonyip@hotmail.fr"
+  to = "anthonyip.pro8@gmail.com"
   from = "noreply@anthony-ip.netlify.app"
   subject = "Nouveau message de contact - Portfolio"
 
