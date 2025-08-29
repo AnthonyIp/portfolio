@@ -112,13 +112,12 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
         return !Object.values(newErrors).some(error => error !== '');
     };
 
-        // Gestion de la soumission du formulaire
+    // Gestion de la soumission du formulaire
     const handleSubmit = (e: React.FormEvent) => {
-        // TOUJOURS prévenir la soumission native
-        e.preventDefault();
-        
         // Validation avant envoi
         if (!validateForm()) {
+            e.preventDefault();
+            
             // Trouver le premier champ avec une erreur pour le focus
             const firstErrorField = Object.entries(errors).find(([_, error]) => error !== '');
             if (firstErrorField) {
@@ -128,7 +127,7 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                     fieldElement.focus();
                 }
             }
-            
+
             setToast({
                 isVisible: true,
                 type: 'error',
@@ -139,9 +138,11 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
 
         // Protection contre la soumission multiple
         if (isSubmitting) {
+            e.preventDefault();
             return;
         }
-        
+
+        // Activer l'état de chargement
         setIsSubmitting(true);
 
         // Nettoyer et valider les données
@@ -154,53 +155,20 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
         // Mettre à jour le formulaire avec les données nettoyées
         setFormData(sanitizedData);
 
-        // Créer les données du formulaire pour Netlify
-        const formDataToSend = new FormData();
-        formDataToSend.append('form-name', 'contact');
-        formDataToSend.append('name', sanitizedData.name);
-        formDataToSend.append('email', sanitizedData.email);
-        formDataToSend.append('message', sanitizedData.message);
-
-        // Envoyer via Netlify Forms avec fetch
-        fetch('/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams(formDataToSend as any).toString(),
-        })
-        .then(response => {
-            if (response.ok) {
-                // Succès
-                setToast({
-                    isVisible: true,
-                    type: 'success',
-                    message: isFr ? 'Message envoyé avec succès !' : 'Message sent successfully!'
-                });
-                
-                // Réinitialiser le formulaire et les erreurs
-                setFormData({name: '', email: '', message: ''});
-                setErrors({name: '', email: '', message: ''});
-            } else {
-                // Erreur HTTP
-                setToast({
-                    isVisible: true,
-                    type: 'error',
-                    message: isFr ? 'Erreur lors de l\'envoi du message.' : 'Error sending message.'
-                });
-            }
-        })
-        .catch(error => {
-            // Erreur réseau
+        // Laisser Netlify gérer la soumission native
+        // Afficher le toast de succès après un délai
+        setTimeout(() => {
             setToast({
                 isVisible: true,
-                type: 'error',
-                message: isFr ? 'Erreur de connexion. Veuillez réessayer.' : 'Connection error. Please try again.'
+                type: 'success',
+                message: isFr ? 'Message envoyé avec succès !' : 'Message sent successfully!'
             });
-        })
-        .finally(() => {
+            
+            // Réinitialiser le formulaire et les erreurs
+            setFormData({name: '', email: '', message: ''});
+            setErrors({name: '', email: '', message: ''});
             setIsSubmitting(false);
-        });
+        }, 2000);
     };
 
     // Fermer le toast
@@ -209,10 +177,12 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
     };
 
     return (
-        <section id="contact" aria-labelledby="contact-heading" className={`py-20 ${isDarkMode ? 'bg-gray-900/60' : 'bg-gray-100/60'}`}>
+        <section id="contact" aria-labelledby="contact-heading"
+                 className={`py-20 ${isDarkMode ? 'bg-gray-900/60' : 'bg-gray-100/60'}`}>
             <div className="max-w-4xl mx-auto px-4">
                 <div className="text-center mb-16">
-                    <h2 id="contact-heading" className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">{title}</h2>
+                    <h2 id="contact-heading"
+                        className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">{title}</h2>
                     <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mb-8"></div>
                     <p className={`text-xl max-w-2xl mx-auto ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>{subtitle}</p>
                 </div>
@@ -222,28 +192,34 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                             <div className="p-3 bg-blue-600 rounded-lg"><Mail size={24}/></div>
                             <div>
                                 <h3 className="text-lg font-semibold">{labels.email}</h3>
-                                <a href={`mailto:${emailAddr}`} aria-label={`Email ${emailAddr}`} className={isDarkMode ? 'text-blue-300 hover:text-blue-200' : 'text-blue-700 hover:text-blue-600'}>{emailAddr}</a>
+                                <a href={`mailto:${emailAddr}`} aria-label={`Email ${emailAddr}`}
+                                   className={isDarkMode ? 'text-blue-300 hover:text-blue-200' : 'text-blue-700 hover:text-blue-600'}>{emailAddr}</a>
                             </div>
                         </div>
                         <div className="flex items-center space-x-4">
                             <div className="p-3 bg-amber-600 rounded-lg"><Phone size={24}/></div>
                             <div>
                                 <h3 className="text-lg font-semibold">{phoneLabel}</h3>
-                                <a href={`tel:${phoneNum}`} aria-label={`Call ${phoneNum}`} className={isDarkMode ? 'text-blue-300 hover:text-blue-200' : 'text-blue-700 hover:text-blue-600'}>{phoneNum}</a>
+                                <a href={`tel:${phoneNum}`} aria-label={`Call ${phoneNum}`}
+                                   className={isDarkMode ? 'text-blue-300 hover:text-blue-200' : 'text-blue-700 hover:text-blue-600'}>{phoneNum}</a>
                             </div>
                         </div>
                         <div className="flex items-center space-x-4">
                             <div className="p-3 bg-purple-600 rounded-lg"><Github size={24}/></div>
                             <div>
                                 <h3 className="text-lg font-semibold">{labels.github}</h3>
-                                <a href={githubUrl} target="_blank" rel="noopener noreferrer" aria-label="Open GitHub profile" className={isDarkMode ? 'text-blue-300 hover:text-blue-200' : 'text-blue-700 hover:text-blue-600'}>{githubUrl.replace('https://', '')}</a>
+                                <a href={githubUrl} target="_blank" rel="noopener noreferrer"
+                                   aria-label="Open GitHub profile"
+                                   className={isDarkMode ? 'text-blue-300 hover:text-blue-200' : 'text-blue-700 hover:text-blue-600'}>{githubUrl.replace('https://', '')}</a>
                             </div>
                         </div>
                         <div className="flex items-center space-x-4">
                             <div className="p-3 bg-emerald-600 rounded-lg"><Linkedin size={24}/></div>
                             <div>
                                 <h3 className="text-lg font-semibold">{labels.linkedin}</h3>
-                                <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label="Open LinkedIn profile" className={isDarkMode ? 'text-blue-300 hover:text-blue-200' : 'text-blue-700 hover:text-blue-600'}>{linkedinUrl.replace('https://', '')}</a>
+                                <a href={linkedinUrl} target="_blank" rel="noopener noreferrer"
+                                   aria-label="Open LinkedIn profile"
+                                   className={isDarkMode ? 'text-blue-300 hover:text-blue-200' : 'text-blue-700 hover:text-blue-600'}>{linkedinUrl.replace('https://', '')}</a>
                             </div>
                         </div>
                         <div>
@@ -256,15 +232,16 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                             </a>
                         </div>
                     </div>
-                    <div className={`p-8 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}>
-                                                 <form
-                             name="contact"
-                             method="POST"
-                             data-netlify="true"
-                             data-netlify-honeypot="bot-field"
-                             onSubmit={handleSubmit}
-                             className="space-y-6"
-                         >
+                    <div
+                        className={`p-8 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}>
+                        <form
+                            name="contact"
+                            method="POST"
+                            data-netlify="true"
+                            data-netlify-honeypot="bot-field"
+                            onSubmit={handleSubmit}
+                            className="space-y-6"
+                        >
                             {/* Champ caché pour Netlify */}
                             <input type="hidden" name="form-name" value="contact"/>
 
@@ -333,7 +310,8 @@ export function Contact({isDarkMode, title, subtitle, labels}: Props) {
                                 }
                             </div>
                             <div>
-                                <label htmlFor="message" className="block text-sm font-medium mb-2">{labels.message}</label>
+                                <label htmlFor="message"
+                                       className="block text-sm font-medium mb-2">{labels.message}</label>
                                 <textarea
                                     rows={4}
                                     id="message"
