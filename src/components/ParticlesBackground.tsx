@@ -34,7 +34,9 @@ export default function ParticlesBackground({ isDarkMode }: Props) {
   return (
     <div
       id='particles-js'
-      className='fixed inset-0 z-0 pointer-events-none'
+      className={`fixed inset-0 z-0 pointer-events-none transition-colors duration-300 ${
+        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+      }`}
       aria-hidden='true'
     />
   );

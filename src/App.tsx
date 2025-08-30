@@ -22,6 +22,8 @@ export default function App() {
   const isFr = language === 'fr';
   const [timelineRaw, setTimelineRaw] = useState<any[]>([]);
   const [projectsRaw, setProjectsRaw] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem('lang');
@@ -39,20 +41,40 @@ export default function App() {
 
   // Load i18n and data JSON from public
   useEffect(() => {
-    fetch('/datas/i18n.json')
-      .then(r => r.json())
-      .then(all => setT(all[language] || all['fr'] || {}))
-      .catch(() => setT({}));
+    setLoading(true);
+    setError(null);
 
-    fetch('/datas/data-timeline.json')
-      .then(r => r.json())
-      .then(j => setTimelineRaw(j.timeline || []))
-      .catch(() => setTimelineRaw([]));
+    const loadData = async () => {
+      try {
+        // Charger les données en parallèle
+        const [i18nResponse, timelineResponse, projectsResponse] = await Promise.all([
+          fetch('/datas/i18n.json'),
+          fetch('/datas/data-timeline.json'),
+          fetch('/datas/data-projects.json')
+        ]);
 
-    fetch('/datas/data-projects.json')
-      .then(r => r.json())
-      .then(j => setProjectsRaw(j.projects || []))
-      .catch(() => setProjectsRaw([]));
+        if (!i18nResponse.ok || !timelineResponse.ok || !projectsResponse.ok) {
+          throw new Error('Erreur lors du chargement des données');
+        }
+
+        const [i18nData, timelineData, projectsData] = await Promise.all([
+          i18nResponse.json(),
+          timelineResponse.json(),
+          projectsResponse.json()
+        ]);
+
+        setT(i18nData[language] || i18nData['fr'] || {});
+        setTimelineRaw(timelineData.timeline || []);
+        setProjectsRaw(projectsData.projects || []);
+        setLoading(false);
+      } catch (err) {
+        console.error('Erreur de chargement:', err);
+        setError(err instanceof Error ? err.message : 'Erreur inconnue');
+        setLoading(false);
+      }
+    };
+
+    loadData();
   }, [language]);
 
   const timelineData = useMemo(() => {
@@ -109,24 +131,20 @@ export default function App() {
   // Inject dynamic hreflang alternates and canonical
   useEffect(() => {
     const head = document.head;
-
+    
     // Supprimer les liens existants pour éviter les doublons
-    const existingAlternates = Array.from(
-      head.querySelectorAll('link[rel="alternate"][hreflang]')
-    );
-    const existingCanonical = Array.from(
-      head.querySelectorAll('link[rel="canonical"]')
-    );
-
-    existingAlternates.forEach(el => el.parentElement?.removeChild(el));
-    existingCanonical.forEach(el => el.parentElement?.removeChild(el));
-
+    const existingAlternates = Array.from(head.querySelectorAll('link[rel="alternate"][hreflang]'));
+    const existingCanonical = Array.from(head.querySelectorAll('link[rel="canonical"]'));
+    
+    existingAlternates.forEach((el) => el.parentElement?.removeChild(el));
+    existingCanonical.forEach((el) => el.parentElement?.removeChild(el));
+    
     // Ajouter le lien canonical
     const canonical = document.createElement('link');
     canonical.rel = 'canonical';
     canonical.href = window.location.origin + window.location.pathname;
     head.appendChild(canonical);
-
+    
     // Ajouter les liens hreflang
     const basePath = window.location.origin;
     const en = document.createElement('link');
@@ -134,55 +152,75 @@ export default function App() {
     en.hreflang = 'en';
     en.href = basePath;
     head.appendChild(en);
-
+    
     const fr = document.createElement('link');
     fr.rel = 'alternate';
     fr.hreflang = 'fr';
     fr.href = basePath + '/fr';
     head.appendChild(fr);
-
+    
     console.log('✅ Liens canonical et hreflang ajoutés dynamiquement');
   }, [language]);
 
-  const navFallback = {
-    home: '',
-    about: '',
-    timeline: '',
-    projects: '',
-    contact: '',
-  };
+  const navFallback = {home: '', about: '', timeline: '', projects: '', contact: ''};
+
+  // Afficher un indicateur de chargement si les données ne sont pas encore chargées
+  if (loading) {
+    return (
+      <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-xl">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Afficher un message d'erreur si il y a un problème
+  if (error) {
+    return (
+      <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
+        <div className="text-center">
+          <p className="text-xl text-red-500 mb-4">Erreur de chargement des données</p>
+          <p className="text-gray-500">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Recharger la page
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
-      className={`relative min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}
+      className={`relative min-h-screen transition-all duration-500 ease-in-out ${
+        isDarkMode 
+          ? 'bg-gray-900 text-white' 
+          : 'bg-gray-50 text-gray-900'
+      }`}
       lang={language}
     >
       <ParticlesBackground isDarkMode={isDarkMode} />
-      <div className='relative z-10'>
+      <div className="relative z-10">
         <Navbar
           isDarkMode={isDarkMode}
-          setIsDarkMode={v => setIsDarkMode(v)}
+          setIsDarkMode={(v) => setIsDarkMode(v)}
           language={language}
-          setLanguage={l => setLanguage(l)}
+          setLanguage={(l) => setLanguage(l)}
           labels={t.nav || navFallback}
         />
-        <main id='home' role='main'>
+        <main id="home" role="main">
           <Hero
             isDarkMode={isDarkMode}
             title={t.hero?.title}
             subtitle={t.hero?.subtitle}
             ctaView={t.hero?.viewWork}
             ctaContact={t.hero?.getInTouch}
-            onViewClick={() =>
-              document
-                .getElementById('projects')
-                ?.scrollIntoView({ behavior: 'smooth' })
-            }
-            onContactClick={() =>
-              document
-                .getElementById('contact')
-                ?.scrollIntoView({ behavior: 'smooth' })
-            }
+            onViewClick={() => document.getElementById('projects')?.scrollIntoView({behavior: 'smooth'})}
+            onContactClick={() => document.getElementById('contact')?.scrollIntoView({behavior: 'smooth'})}
           />
           <About
             isDarkMode={isDarkMode}
@@ -193,7 +231,7 @@ export default function App() {
             stats={{
               projects: t.about?.projects,
               experience: t.about?.experience,
-              clients: t.about?.clients,
+              clients: t.about?.clients
             }}
             labels={{
               backend: t.about?.backend,
@@ -204,24 +242,24 @@ export default function App() {
               databaseDesc: t.about?.databaseDesc,
             }}
           />
-          <Timeline
-            isDarkMode={isDarkMode}
-            title={t.timeline?.title}
+          <Timeline 
+            isDarkMode={isDarkMode} 
+            title={t.timeline?.title} 
             subtitle={t.timeline?.subtitle}
             items={timelineData}
           />
-          <Projects
-            isDarkMode={isDarkMode}
-            title={t.projects?.title}
+          <Projects 
+            isDarkMode={isDarkMode} 
+            title={t.projects?.title} 
             subtitle={t.projects?.subtitle}
-            allLabel={t.projects?.allProjects}
+            allLabel={t.projects?.allProjects} 
             projects={projects}
             language={language}
           />
-          <Contact
-            isDarkMode={isDarkMode}
-            title={t.contact?.title}
-            subtitle={t.contact?.subtitle}
+          <Contact 
+            isDarkMode={isDarkMode} 
+            title={t.contact?.title} 
+            subtitle={t.contact?.subtitle} 
             isFr={isFr}
           />
         </main>

@@ -23,7 +23,7 @@ export function Hero({
     <section
       id='home'
       aria-labelledby='home-heading'
-      className='h-screen flex items-center justify-center relative overflow-hidden'
+      className='min-h-screen py-20 md:py-32 flex items-center justify-center relative overflow-hidden'
     >
       <div
         className={`absolute inset-0 ${isDarkMode ? 'bg-gradient-to-br from-blue-900/20 to-purple-900/20' : 'bg-gradient-to-br from-blue-100/50 to-purple-100/50'}`}

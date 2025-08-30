@@ -3,11 +3,11 @@ type Props = { isDarkMode: boolean; text: string };
 export function Footer({ isDarkMode, text }: Props) {
   return (
     <footer
-      className={`py-8 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}
+      className={`py-8 md:py-12 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}
     >
       <div className='max-w-6xl mx-auto px-4'>
         <div className='text-center'>
-          <p className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
+          <p className={`text-sm md:text-base ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
             {text}
           </p>
         </div>

@@ -17,19 +17,19 @@ export function Contact({ isDarkMode, title, subtitle, isFr }: Props) {
     <section
       id='contact'
       aria-labelledby='contact-heading'
-      className={`h-screen flex items-center ${isDarkMode ? 'bg-gray-900/60' : 'bg-gray-100/60'}`}
+      className={`py-20 md:py-32 ${isDarkMode ? 'bg-gray-900/60' : 'bg-gray-100/60'}`}
     >
       <div className='max-w-6xl mx-auto px-4 w-full'>
-        <div className='text-center mb-16'>
+        <div className='text-center mb-12 md:mb-16'>
           <h2
             id='contact-heading'
-            className='text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent'
+            className='text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent'
           >
             {title}
           </h2>
-          <div className='w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mb-8'></div>
+          <div className='w-16 md:w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mb-6 md:mb-8'></div>
           <p
-            className={`text-xl max-w-2xl mx-auto ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+            className={`text-lg md:text-xl max-w-2xl mx-auto px-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
           >
             {subtitle}
           </p>
