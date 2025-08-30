@@ -12,7 +12,7 @@ type Props = {
 
 export function Hero({isDarkMode, title, subtitle, ctaView, ctaContact, onViewClick, onContactClick}: Props) {
     return (
-        <section id="home" aria-labelledby="home-heading" className="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <section id="home" aria-labelledby="home-heading" className="h-screen flex items-center justify-center relative overflow-hidden">
             <div className={`absolute inset-0 ${isDarkMode ? 'bg-gradient-to-br from-blue-900/20 to-purple-900/20' : 'bg-gradient-to-br from-blue-100/50 to-purple-100/50'}`}></div>
             <div className="max-w-4xl mx-auto text-center px-4 relative z-10">
                 <div className="mb-8">

@@ -176,8 +176,7 @@ export default function App() {
                         projects={projects}
                         language={language}
                     />
-                    <Contact isDarkMode={isDarkMode} title={t.contact?.title} subtitle={t.contact?.subtitle}
-                             labels={t.contact || {}} isFr={isFr}/>
+                    <Contact isDarkMode={isDarkMode} title={t.contact?.title} subtitle={t.contact?.subtitle} isFr={isFr}/>
                 </main>
                 <Footer isDarkMode={isDarkMode} text={t.footer || ''}/>
                 <BackToTop isDarkMode={isDarkMode}/>

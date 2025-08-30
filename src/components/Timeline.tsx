@@ -10,7 +10,7 @@ type Props = {
 
 export function Timeline({isDarkMode, title, subtitle, items}: Props) {
     return (
-        <section id="timeline" aria-labelledby="timeline-heading" className={`py-20 ${isDarkMode ? 'bg-gray-900/60' : 'bg-gray-100/60'}`}>
+        <section id="timeline" aria-labelledby="timeline-heading" className={`min-h-screen py-20 ${isDarkMode ? 'bg-gray-900/60' : 'bg-gray-100/60'}`}>
             <div className="max-w-6xl mx-auto px-4">
                 <div className="text-center mb-16">
                     <h2 id="timeline-heading" className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">{title}</h2>

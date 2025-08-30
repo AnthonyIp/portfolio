@@ -40,7 +40,7 @@ Un portfolio moderne et interactif construit avec React 18, TypeScript, Vite et 
 ### 📞 Section Contact
 - **Liens cliquables** : email (mailto), téléphone (tel), GitHub, LinkedIn
 - **Bouton CV** avec téléchargement en français/anglais
-- **Formulaire de contact sécurisé** avec validation double et Netlify Functions
+- **Informations de contact** avec liens cliquables directs
 
 ### 🔍 SEO et Accessibilité
 - **Meta tags complets** : description, OpenGraph, Twitter Cards
@@ -58,8 +58,8 @@ Un portfolio moderne et interactif construit avec React 18, TypeScript, Vite et 
 
 - **Frontend** : React 18, TypeScript, TailwindCSS
 - **Build** : Vite, ESLint
-- **Backend** : Netlify Functions (serverless)
-- **Email** : Resend API (sécurisé côté serveur)
+- **Backend** : Aucun (frontend statique)
+- **Email** : Liens mailto directs
 - **Icons** : Lucide React
 - **Particules** : particles.js
 - **État** : React Hooks (useState, useEffect, useMemo)
@@ -81,7 +81,7 @@ src/
 │   ├── Hero.tsx        # Section d'accueil
 │   ├── About.tsx       # À propos avec compétences
 │   ├── Timeline.tsx    # Parcours avec badges tech/skills
-│   ├── Contact.tsx     # Contact avec liens cliquables
+│   ├── Contact.tsx     # Contact avec informations et liens
 │   ├── Footer.tsx      # Pied de page
 │   ├── ParticlesBackground.tsx # Arrière-plan animé
 │   └── BackToTop.tsx   # Bouton retour en haut

@@ -39,16 +39,7 @@
     },
     "contact": {
       "title": "Let's Collaborate",
-      "subtitle": "Looking to transform your idea into a powerful web application? Let’s connect and build it together.",
-      "email": "Email",
-      "github": "GitHub",
-      "linkedin": "LinkedIn",
-      "name": "Name",
-      "namePlaceholder": "Your name",
-      "emailPlaceholder": "your.email@example.com",
-      "message": "Message",
-      "messagePlaceholder": "Tell me about your project...",
-      "send": "Send Message"
+      "subtitle": "Looking to transform your idea into a powerful web application? Let's connect and build it together."
     },
     "footer": "© 2025 Anthony Ip Portfolio. Built with React, TypeScript, and Tailwind CSS."
   },
@@ -92,16 +83,7 @@
     },
     "contact": {
       "title": "Travaillons ensemble",
-      "subtitle": "Envie de transformer votre idée en application performante ? Discutons et construisons-la ensemble.",
-      "email": "Email",
-      "github": "GitHub",
-      "linkedin": "LinkedIn",
-      "name": "Nom",
-      "namePlaceholder": "Votre nom",
-      "emailPlaceholder": "votre.email@exemple.com",
-      "message": "Message",
-      "messagePlaceholder": "Parlez-moi de votre projet...",
-      "send": "Envoyer le message"
+      "subtitle": "Envie de transformer votre idée en application performante ? Discutons et construisons-la ensemble."
     },
     "footer": "© 2025 Portfolio Anthony Ip. Construit avec React, TypeScript et Tailwind CSS."
   }

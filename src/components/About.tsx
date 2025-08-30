@@ -19,8 +19,8 @@ type Props = {
 
 export function About({isDarkMode, title, subtitle, description1, description2, stats, labels}: Props) {
     return (
-        <section id="about" aria-labelledby="about-heading" className={`py-20 ${isDarkMode ? 'bg-gray-800/60' : 'bg-white/60'}`}>
-            <div className="max-w-6xl mx-auto px-4">
+        <section id="about" aria-labelledby="about-heading" className={`h-screen flex items-center ${isDarkMode ? 'bg-gray-800/60' : 'bg-white/60'}`}>
+            <div className="max-w-6xl mx-auto px-4 w-full">
                 <div className="text-center mb-16">
                     <h2 id="about-heading"
                         className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">{title}</h2>

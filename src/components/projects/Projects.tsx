@@ -26,7 +26,7 @@ export const Projects = ({isDarkMode, title, subtitle, allLabel, projects, langu
             <section
                 id="projects"
                 aria-labelledby="projects-heading"
-                className={`py-20 ${isDarkMode ? 'bg-gray-800/60' : 'bg-white/60'}`}
+                className={`min-h-screen py-20 ${isDarkMode ? 'bg-gray-800/60' : 'bg-white/60'}`}
             >
                 <div className="max-w-6xl mx-auto px-4">
                     {/* Header */}

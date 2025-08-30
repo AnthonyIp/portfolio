@@ -1,7 +1,7 @@
 [build]
   command = "npm run build"
   publish = "dist"
-  functions = "netlify/functions"
+
 
 [[redirects]]
   from = "/*"
@@ -31,10 +31,3 @@
     X-RateLimit-Limit = "5"
     X-RateLimit-Remaining = "4"
     X-RateLimit-Reset = "3600"
-
-# Configuration pour les fonctions Netlify
-[functions]
-  # Dossier des fonctions
-  directory = "netlify/functions"
-  # Installer les dépendances automatiquement
-  node_bundler = "esbuild"
