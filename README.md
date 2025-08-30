@@ -105,10 +105,6 @@ npm run format:check     # Vérification du formatage
 npm run security         # Audit de sécurité
 npm run security:fix     # Correction automatique
 
-# Tests
-npm run test             # Exécuter les tests
-npm run test:coverage    # Couverture de code
-
 # Utilitaires
 npm run clean            # Nettoyer les caches
 npm run pre-commit       # Vérifications pré-commit

@@ -7,7 +7,9 @@ export function Footer({ isDarkMode, text }: Props) {
     >
       <div className='max-w-6xl mx-auto px-4'>
         <div className='text-center'>
-          <p className={`text-sm md:text-base ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+          <p
+            className={`text-sm md:text-base ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}
+          >
             {text}
           </p>
         </div>
