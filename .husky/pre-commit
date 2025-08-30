@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Exécuter les vérifications de qualité avant chaque commit
+echo "🔍 Vérification de la qualité du code..."
+
+# Linting
+echo "📝 Vérification ESLint..."
+npm run lint
+
+# Vérification des types TypeScript
+echo "🔧 Vérification des types TypeScript..."
+npm run type-check
+
+# Vérification du formatage
+echo "🎨 Vérification du formatage..."
+npm run format:check
+
+# Vérification de sécurité
+echo "🔒 Vérification de sécurité..."
+npm run security
+
+echo "✅ Toutes les vérifications sont passées !"
