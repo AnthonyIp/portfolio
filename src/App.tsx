@@ -8,10 +8,14 @@ import Footer from './components/Footer';
 import ParticlesBackground from './components/ParticlesBackground';
 import BackToTop from './components/BackToTop';
 import { useLocalStorage } from './hooks';
+import { useLenis } from './hooks/useLenis';
 import type { Language } from './types';
 import { useEffect, useMemo, useState } from 'react';
 
 export default function App() {
+  // Initialiser Lenis pour le scroll fluide
+  useLenis();
+  
   const [isDarkMode, setIsDarkMode] = useLocalStorage<boolean>(
     'theme-dark',
     true
@@ -234,16 +238,26 @@ export default function App() {
             subtitle={t.hero?.subtitle}
             ctaView={t.hero?.viewWork}
             ctaContact={t.hero?.getInTouch}
-            onViewClick={() =>
-              document
-                .getElementById('projects')
-                ?.scrollIntoView({ behavior: 'smooth' })
-            }
-            onContactClick={() =>
-              document
-                .getElementById('contact')
-                ?.scrollIntoView({ behavior: 'smooth' })
-            }
+            onViewClick={() => {
+              const element = document.getElementById('projects');
+              if (element) {
+                if (window.lenis) {
+                  window.lenis.scrollTo(element, { offset: -80 });
+                } else {
+                  element.scrollIntoView({ behavior: 'smooth' });
+                }
+              }
+            }}
+            onContactClick={() => {
+              const element = document.getElementById('contact');
+              if (element) {
+                if (window.lenis) {
+                  window.lenis.scrollTo(element, { offset: -80 });
+                } else {
+                  element.scrollIntoView({ behavior: 'smooth' });
+                }
+              }
+            }}
           />
           <About
             isDarkMode={isDarkMode}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Menu, Moon, Sun, X } from 'lucide-react';
+import { AnimatedLink } from './AnimatedLink';
 import type { Language } from '../types';
 
 type Props = {
@@ -33,7 +34,15 @@ export function Navbar({
   }, []);
 
   const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    const element = document.getElementById(id);
+    if (element) {
+      // Utiliser Lenis pour un scroll fluide si disponible
+      if (window.lenis) {
+        window.lenis.scrollTo(element, { offset: -80 });
+      } else {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
     setIsMenuOpen(false);
   };
 
@@ -75,7 +84,7 @@ export function Navbar({
               <button
                 key={id}
                 onClick={() => scrollToSection(id)}
-                className={`transition-colors duration-200 font-medium ${isDarkMode ? 'hover:text-blue-400' : 'hover:text-blue-600'}`}
+                className={`relative font-medium transition-all duration-200 hover:scale-105 ${isDarkMode ? 'hover:text-blue-400' : 'hover:text-blue-600'}`}
               >
                 {labels[id as keyof typeof labels]}
               </button>

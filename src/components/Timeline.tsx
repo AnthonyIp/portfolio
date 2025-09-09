@@ -1,4 +1,6 @@
 import { Briefcase, GraduationCap, MapPin } from 'lucide-react';
+import { useScrollAnimation, useFadeInAnimation, useSlideInAnimation } from '../hooks/useScrollAnimation';
+import { useTimelineItemAnimation } from '../hooks/useCardAnimation';
 import type { TimelineItem } from '../types';
 
 type Props = {
@@ -9,14 +11,20 @@ type Props = {
 };
 
 export function Timeline({ isDarkMode, title, subtitle, items }: Props) {
+  const sectionRef = useScrollAnimation();
+  const headerRef = useFadeInAnimation(0.2);
+  const desktopTimelineRef = useFadeInAnimation(0.4);
+  const mobileTimelineRef = useFadeInAnimation(0.4);
+
   return (
     <section
+      ref={sectionRef}
       id='timeline'
       aria-labelledby='timeline-heading'
       className={`py-12 md:py-20 ${isDarkMode ? 'bg-gray-900/60' : 'bg-gray-100/60'}`}
     >
       <div className='max-w-6xl mx-auto px-4'>
-        <div className='text-center mb-12 md:mb-16'>
+        <div ref={headerRef} className='text-center mb-12 md:mb-16'>
           <h2
             id='timeline-heading'
             className='text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent'
@@ -32,16 +40,19 @@ export function Timeline({ isDarkMode, title, subtitle, items }: Props) {
         </div>
 
         {/* Desktop Timeline */}
-        <div className='hidden md:block relative'>
+        <div ref={desktopTimelineRef} className='hidden md:block relative'>
           <div
             className={`absolute left-1/2 transform -translate-x-1/2 w-1 h-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'}`}
           ></div>
           <div className='space-y-12'>
-            {items.map((item, index) => (
-              <div
-                key={index}
-                className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}
-              >
+            {items.map((item, index) => {
+              const itemRef = useTimelineItemAnimation(index);
+              return (
+                <div
+                  key={index}
+                  ref={itemRef}
+                  className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}
+                >
                 <div className='w-1/2 px-8'>
                   <div
                     className={`p-6 rounded-lg border transition-all duration-300 hover:transform hover:scale-105 ${isDarkMode ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600' : 'bg-white border-gray-200 hover:border-gray-300 shadow-sm hover:shadow-md'}`}
@@ -113,16 +124,19 @@ export function Timeline({ isDarkMode, title, subtitle, items }: Props) {
                   className={`w-4 h-4 rounded-full border-4 ${item.type === 'education' ? 'bg-blue-400 border-blue-200' : 'bg-purple-400 border-purple-200'} z-10`}
                 ></div>
                 <div className='w-1/2'></div>
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </div>
         </div>
 
         {/* Mobile Timeline - Version compacte et optimisée */}
-        <div className='md:hidden'>
+        <div ref={mobileTimelineRef} className='md:hidden'>
           <div className='space-y-6'>
-            {items.map((item, index) => (
-              <div key={index} className='relative'>
+            {items.map((item, index) => {
+              const mobileItemRef = useTimelineItemAnimation(index);
+              return (
+                <div key={index} ref={mobileItemRef} className='relative'>
                 {/* Ligne de connexion mobile */}
                 {index < items.length - 1 && (
                   <div
@@ -281,8 +295,9 @@ export function Timeline({ isDarkMode, title, subtitle, items }: Props) {
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
