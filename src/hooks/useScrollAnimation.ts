@@ -101,7 +101,10 @@ export const useFadeInAnimation = (delay = 0) => {
   return elementRef;
 };
 
-export const useSlideInAnimation = (direction: 'left' | 'right' | 'up' | 'down' = 'up', delay = 0) => {
+export const useSlideInAnimation = (
+  direction: 'left' | 'right' | 'up' | 'down' = 'up',
+  delay = 0
+) => {
   const elementRef = useRef<HTMLElement>(null);
 
   useEffect(() => {

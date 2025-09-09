@@ -33,15 +33,16 @@ export const AnimatedLink = ({
         duration: 0.3,
         ease: 'power2.out',
       });
-      
+
       if (underline) {
-        gsap.fromTo(link, 
+        gsap.fromTo(
+          link,
           { scaleX: 0 },
-          { 
-            scaleX: 1, 
-            duration: 0.4, 
+          {
+            scaleX: 1,
+            duration: 0.4,
             ease: 'power2.out',
-            transformOrigin: 'left'
+            transformOrigin: 'left',
           }
         );
       }
@@ -54,13 +55,13 @@ export const AnimatedLink = ({
         duration: 0.3,
         ease: 'power2.out',
       });
-      
+
       if (underline) {
         gsap.to(link, {
           scaleX: 0,
           duration: 0.4,
           ease: 'power2.out',
-          transformOrigin: 'right'
+          transformOrigin: 'right',
         });
       }
     };
@@ -74,9 +75,12 @@ export const AnimatedLink = ({
     };
   }, [underline]);
 
-  const baseClasses = 'relative inline-block transition-all duration-200 ease-out';
-  const underlineClasses = underline ? 'after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-current after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-out' : '';
-  
+  const baseClasses =
+    'relative inline-block transition-all duration-200 ease-out';
+  const underlineClasses = underline
+    ? 'after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-current after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-out'
+    : '';
+
   const classes = `${baseClasses} ${underlineClasses} ${className}`;
 
   return (

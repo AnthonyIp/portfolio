@@ -29,8 +29,8 @@ export const LazyImage = ({
     if (!container) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      entries => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
             setIsInView(true);
             observer.unobserve(container);
@@ -56,7 +56,7 @@ export const LazyImage = ({
       img.onload = () => {
         setIsLoaded(true);
         onLoad?.();
-        
+
         // Animation d'apparition
         if (imgRef.current) {
           gsap.fromTo(
@@ -85,30 +85,27 @@ export const LazyImage = ({
   }, [isInView, src, isLoaded, hasError, onLoad, onError]);
 
   return (
-    <div
-      ref={containerRef}
-      className={`relative overflow-hidden ${className}`}
-    >
+    <div ref={containerRef} className={`relative overflow-hidden ${className}`}>
       {!isLoaded && !hasError && (
-        <div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center">
+        <div className='absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center'>
           {placeholder && (
-            <div className="text-gray-400 text-sm">{placeholder}</div>
+            <div className='text-gray-400 text-sm'>{placeholder}</div>
           )}
         </div>
       )}
-      
+
       {hasError && (
-        <div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-          <div className="text-gray-400 text-sm">Erreur de chargement</div>
+        <div className='absolute inset-0 bg-gray-200 dark:bg-gray-700 flex items-center justify-center'>
+          <div className='text-gray-400 text-sm'>Erreur de chargement</div>
         </div>
       )}
-      
+
       {isLoaded && (
         <img
           ref={imgRef}
           src={src}
           alt={alt}
-          className="w-full h-full object-cover"
+          className='w-full h-full object-cover'
         />
       )}
     </div>

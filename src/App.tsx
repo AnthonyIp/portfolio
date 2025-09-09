@@ -15,7 +15,7 @@ import { useEffect, useMemo, useState } from 'react';
 export default function App() {
   // Initialiser Lenis pour le scroll fluide
   useLenis();
-  
+
   const [isDarkMode, setIsDarkMode] = useLocalStorage<boolean>(
     'theme-dark',
     true

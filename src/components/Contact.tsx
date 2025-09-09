@@ -1,5 +1,9 @@
 import { Github, Linkedin, Mail, Phone } from 'lucide-react';
-import { useScrollAnimation, useFadeInAnimation, useSlideInAnimation } from '../hooks/useScrollAnimation';
+import {
+  useScrollAnimation,
+  useFadeInAnimation,
+  useSlideInAnimation,
+} from '../hooks/useScrollAnimation';
 import { AnimatedButton } from './AnimatedButton';
 import { ContactCard } from './ContactCard';
 
@@ -44,7 +48,10 @@ export function Contact({ isDarkMode, title, subtitle, isFr }: Props) {
           </p>
         </div>
 
-        <div ref={cardsRef} className='grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12'>
+        <div
+          ref={cardsRef}
+          className='grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12'
+        >
           <ContactCard
             isDarkMode={isDarkMode}
             index={0}
@@ -52,8 +59,8 @@ export function Contact({ isDarkMode, title, subtitle, isFr }: Props) {
             title={isFr ? 'Email' : 'Email'}
             content={emailAddr}
             href={`mailto:${emailAddr}`}
-            iconBg="bg-blue-600"
-            hoverColor="hover:border-blue-500/50"
+            iconBg='bg-blue-600'
+            hoverColor='hover:border-blue-500/50'
           />
           <ContactCard
             isDarkMode={isDarkMode}
@@ -62,38 +69,38 @@ export function Contact({ isDarkMode, title, subtitle, isFr }: Props) {
             title={isFr ? 'Téléphone' : 'Phone'}
             content={phoneNum}
             href={`tel:${phoneNum}`}
-            iconBg="bg-amber-600"
-            hoverColor="hover:border-amber-500/50"
+            iconBg='bg-amber-600'
+            hoverColor='hover:border-amber-500/50'
           />
           <ContactCard
             isDarkMode={isDarkMode}
             index={2}
             icon={<Github size={28} className='text-white' />}
-            title="GitHub"
+            title='GitHub'
             content={githubUrl.replace('https://', '')}
             href={githubUrl}
             isExternal
-            iconBg="bg-purple-600"
-            hoverColor="hover:border-purple-500/50"
+            iconBg='bg-purple-600'
+            hoverColor='hover:border-purple-500/50'
           />
           <ContactCard
             isDarkMode={isDarkMode}
             index={3}
             icon={<Linkedin size={28} className='text-white' />}
-            title="LinkedIn"
+            title='LinkedIn'
             content={linkedinUrl.replace('https://', '')}
             href={linkedinUrl}
             isExternal
-            iconBg="bg-emerald-600"
-            hoverColor="hover:border-emerald-500/50"
+            iconBg='bg-emerald-600'
+            hoverColor='hover:border-emerald-500/50'
           />
         </div>
 
         <div ref={buttonRef} className='text-center'>
           <AnimatedButton
             href={isFr ? '/cv/cv.pdf' : '/cv/cv-en.pdf'}
-            variant="primary"
-            size="lg"
+            variant='primary'
+            size='lg'
             className='inline-flex items-center px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl'
           >
             {isFr ? 'Télécharger mon CV' : 'Download my resume'}

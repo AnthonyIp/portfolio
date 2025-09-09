@@ -1,6 +1,10 @@
 import type { ProjectsProps } from '../../types/projects';
 import { useProjects } from '../../hooks/useProjects';
-import { useScrollAnimation, useFadeInAnimation, useSlideInAnimation } from '../../hooks/useScrollAnimation';
+import {
+  useScrollAnimation,
+  useFadeInAnimation,
+  useSlideInAnimation,
+} from '../../hooks/useScrollAnimation';
 import { TechnologyButton } from './TechnologyButton';
 import { ProjectCard } from './ProjectCard';
 import { PaginationDots } from './PaginationDots';
@@ -81,7 +85,10 @@ export const Projects = ({
           </div>
 
           {/* Project Grid */}
-          <div ref={gridRef} className='grid md:grid-cols-2 lg:grid-cols-3 gap-8'>
+          <div
+            ref={gridRef}
+            className='grid md:grid-cols-2 lg:grid-cols-3 gap-8'
+          >
             {displayedProjects.map((project, index) => (
               <ProjectCard
                 key={language === 'fr' ? project.title_fr : project.title_en}

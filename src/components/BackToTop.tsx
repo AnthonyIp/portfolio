@@ -21,17 +21,17 @@ export default function BackToTop({ isDarkMode }: Props) {
     if (visible) {
       gsap.fromTo(
         buttonRef.current,
-        { 
-          opacity: 0, 
-          scale: 0.5, 
-          y: 20 
+        {
+          opacity: 0,
+          scale: 0.5,
+          y: 20,
         },
-        { 
-          opacity: 1, 
-          scale: 1, 
-          y: 0, 
-          duration: 0.3, 
-          ease: 'back.out(1.7)' 
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.3,
+          ease: 'back.out(1.7)',
         }
       );
     } else {
@@ -40,7 +40,7 @@ export default function BackToTop({ isDarkMode }: Props) {
         scale: 0.5,
         y: 20,
         duration: 0.2,
-        ease: 'power2.in'
+        ease: 'power2.in',
       });
     }
   }, [visible]);
@@ -86,7 +86,7 @@ export default function BackToTop({ isDarkMode }: Props) {
   };
 
   if (!visible) return null;
-  
+
   return (
     <button
       ref={buttonRef}

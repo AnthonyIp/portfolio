@@ -57,12 +57,16 @@ export const AnimatedButton = ({
     };
   }, []);
 
-  const baseClasses = 'relative inline-flex items-center justify-center font-medium transition-all duration-200 ease-out transform-gpu';
-  
+  const baseClasses =
+    'relative inline-flex items-center justify-center font-medium transition-all duration-200 ease-out transform-gpu';
+
   const variantClasses = {
-    primary: 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl',
-    secondary: 'bg-gray-600 hover:bg-gray-700 text-white shadow-lg hover:shadow-xl',
-    outline: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white',
+    primary:
+      'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl',
+    secondary:
+      'bg-gray-600 hover:bg-gray-700 text-white shadow-lg hover:shadow-xl',
+    outline:
+      'border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white',
     ghost: 'text-blue-600 hover:bg-blue-50 hover:text-blue-700',
   };
 
@@ -73,8 +77,8 @@ export const AnimatedButton = ({
   };
 
   // Si className est fourni, l'utiliser en priorité, sinon utiliser les classes par défaut
-  const classes = className 
-    ? `${baseClasses} ${className}` 
+  const classes = className
+    ? `${baseClasses} ${className}`
     : `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]}`;
 
   if (href) {

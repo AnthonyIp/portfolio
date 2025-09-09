@@ -1,5 +1,8 @@
 import { Database, Globe, Server } from 'lucide-react';
-import { useFadeInAnimation, useSlideInAnimation } from '../hooks/useScrollAnimation';
+import {
+  useFadeInAnimation,
+  useSlideInAnimation,
+} from '../hooks/useScrollAnimation';
 
 type Props = {
   isDarkMode: boolean;
