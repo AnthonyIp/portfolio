@@ -53,7 +53,6 @@
         "JavaScript",
         "Bootstrap",
         "PostgreSQL"
-
       ],
       "image": "/images/dpd-france.png",
       "github": "",
@@ -135,6 +134,56 @@
       "challenges_en": "The main challenge was to design a robust and secure platform integrating advanced features (rich editor, GDPR compliance, SEO) while keeping the codebase maintainable and aligned with PSR-12 standards.",
       "longDescription_fr": "PaP Pédiatrie est une solution complète de gestion de contenu médical pédiatrique. Construit avec Symfony 7.3, le projet offre une interface d’administration moderne basée sur AdminLTE et Bootstrap 5. Les éditeurs disposent d’un WYSIWYG avancé (Summernote) avec gestion d’images, pièces jointes PDF et formats enrichis. Le système de cookies est strictement conforme au RGPD avec consentement explicite et gestion granulaire. La plateforme intègre également une gestion avancée des utilisateurs et rôles, une optimisation SEO, des statistiques en temps réel et un moteur de recherche performant. Le projet met en avant des standards de qualité élevés via les tests (PHPUnit, tests de mutation avec Infection) et l’analyse statique (PHPStan).",
       "longDescription_en": "PaP Pediatrics is a comprehensive pediatric medical content management solution. Built with Symfony 7.3, the project features a modern administration interface powered by AdminLTE and Bootstrap 5. Editors benefit from an advanced WYSIWYG editor (Summernote) with image uploads, PDF attachments, and rich formatting. The cookie system is fully GDPR-compliant with explicit consent and granular management. The platform also includes advanced user and role management, SEO optimization, real-time statistics, and a powerful search engine. High code quality standards are enforced through unit/integration testing (PHPUnit, Infection) and static analysis (PHPStan)."
+    },
+    {
+      "title_fr": "Tabac Presse « Les Allumettes » – Site vitrine",
+      "title_en": "“Les Allumettes” Tobacconist & Newsstand – Showcase Website",
+      "description_fr": "Création d’un site vitrine moderne et performant pour un tabac-presse (« Les Allumettes »), développé avec Next.js, React et TypeScript. Le projet met l’accent sur une expérience fluide, responsive et accessible, avec un thème sombre/clair, des micro-interactions soignées et une base SEO locale solide. Réalisé en environ une semaine, avec une dette technique et des coûts de maintenance maîtrisés.",
+      "description_en": "Creation of a modern, high-performance showcase website for a tobacconist & newsstand (“Les Allumettes”), built with Next.js, React, and TypeScript. The project focuses on a smooth, responsive, and accessible user experience, featuring dark/light theme, refined micro-interactions, and strong local SEO. Completed in about one week with low technical debt and controlled maintenance costs.",
+      "tech": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS"
+      ],
+      "image": "/images/les-allumettes.png",
+      "github": "https://github.com/AnthonyIp/tabac-you",
+      "live": "https://les-allumettes.netlify.app/",
+      "category": "web",
+      "features_fr": [
+        "Interface moderne, rapide et responsive (mobile/tablette/desktop)",
+        "Thème sombre/clair avec détection système et bascule manuelle",
+        "Animations et micro-interactions fluides sur les textes, images et boutons",
+        "SEO local optimisé (balises méta, titre/description, maillage interne)",
+        "Performances soignées (optimisation d’images, lazy-loading, bundling Next.js)",
+        "Accessibilité renforcée (contrastes, sémantique ARIA, navigation clavier)",
+        "Pages clés : Accueil, Services (Tabac, Presse, FDJ), Horaires, Accès/Contact",
+        "Carte d’accès et informations pratiques (adresse, stationnement, téléphone)",
+        "Composants UI réutilisables (boutons, cartes, sections héro, listes de services)",
+        "CI/CD et déploiement continu sur Netlify"
+      ],
+      "features_en": [
+        "Modern, fast, and responsive UI (mobile/tablet/desktop)",
+        "Dark/light theme with system detection and manual toggle",
+        "Smooth animations and micro-interactions on text, images, and buttons",
+        "Optimized local SEO (meta tags, title/description, internal linking)",
+        "Performance tuning (image optimization, lazy-loading, Next.js bundling)",
+        "Improved accessibility (contrast, ARIA semantics, keyboard navigation)",
+        "Key pages: Home, Services (Tobacco, Press, FDJ), Opening Hours, Access/Contact",
+        "Access map and practical info (address, parking, phone)",
+        "Reusable UI components (buttons, cards, hero sections, service lists)",
+        "CI/CD with continuous deployment on Netlify"
+      ],
+      "duration_fr": "1 semaine",
+      "duration_en": "1 week",
+      "team_fr": "Projet individuel",
+      "team_en": "Individual project",
+      "role_fr": "Développeur Full-Stack",
+      "role_en": "Full-Stack Developer",
+      "challenges_fr": "Concilier une identité visuelle chaleureuse (tabac-presse de proximité) avec un design minimaliste et moderne, tout en garantissant des performances élevées malgré les animations. Mettre en place un thème sombre/clair accessible et une base SEO locale solide (structure sémantique, données de contact claires) en un délai court. Limiter la dette technique pour faciliter l’évolution future (contenus, sections, promotions).",
+      "challenges_en": "Balancing a warm, neighborhood brand identity with a minimalist, modern look while maintaining high performance despite animations. Implementing an accessible dark/light theme and strong local SEO foundation (semantic structure, clear contact data) under a tight deadline. Keeping technical debt low to enable future iterations (content, sections, promotions).",
+      "longDescription_fr": "« Les Allumettes » est un site vitrine réalisé avec Next.js, React et TypeScript, stylé avec Tailwind CSS pour offrir une interface rapide, cohérente et élégante. Le design met en avant la proximité et la convivialité d’un tabac-presse en centre-ville, avec des sections claires : présentation de la boutique, services (tabac, presse, FDJ), horaires, accès et contact. Les micro-interactions et animations accompagnent la lecture sans alourdir le rendu, grâce à une optimisation des images et au lazy-loading. Le site propose un thème sombre/clair, détecte les préférences système et reste totalement responsive. Côté SEO, la structure sémantique, les balises méta et le maillage interne améliorent la visibilité locale. Le déploiement sur Netlify assure une livraison rapide, sécurisée et un flux CI/CD simple. Le projet a été conçu et livré en une semaine, avec une attention particulière portée à la maintenabilité, afin de pouvoir enrichir aisément les contenus (offres, actualités, galeries) à l’avenir.",
+      "longDescription_en": "“Les Allumettes” is a showcase website built with Next.js, React, and TypeScript, styled using Tailwind CSS to deliver a fast, consistent, and elegant interface. The design highlights the friendly, neighborhood character of a downtown tobacconist/newsstand with clear sections: shop introduction, services (tobacco, press, FDJ), opening hours, access, and contact. Micro-interactions and animations guide reading without performance trade-offs, thanks to optimized images and lazy-loading. The site offers a dark/light theme, respects system preferences, and is fully responsive. On the SEO side, semantic structure, meta tags, and internal linking strengthen local visibility. Deployment on Netlify provides fast, secure delivery with a simple CI/CD pipeline. The project was designed and shipped within one week, with a strong emphasis on maintainability so future content (offers, news, galleries) can be added easily."
     }
   ]
 }
