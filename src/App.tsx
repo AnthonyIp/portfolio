@@ -223,7 +223,7 @@ export default function App() {
       lang={language}
     >
       <ParticlesBackground isDarkMode={isDarkMode} />
-      <div className='relative z-10'>
+      <div className='relative z-10 overflow-x-hidden'>
         <Navbar
           isDarkMode={isDarkMode}
           setIsDarkMode={v => setIsDarkMode(v)}

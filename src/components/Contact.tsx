@@ -32,7 +32,7 @@ export function Contact({ isDarkMode, title, subtitle, isFr }: Props) {
       aria-labelledby='contact-heading'
       className={`py-20 md:py-32 ${isDarkMode ? 'bg-gray-900/60' : 'bg-gray-100/60'}`}
     >
-      <div className='max-w-6xl mx-auto px-4 w-full'>
+      <div className='max-w-6xl mx-auto px-4 w-full overflow-x-hidden'>
         <div ref={headerRef} className='text-center mb-12 md:mb-16'>
           <h2
             id='contact-heading'
@@ -50,7 +50,7 @@ export function Contact({ isDarkMode, title, subtitle, isFr }: Props) {
 
         <div
           ref={cardsRef}
-          className='grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12'
+          className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12'
         >
           <ContactCard
             isDarkMode={isDarkMode}

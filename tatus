@@ -1,0 +1,62 @@
+[1mdiff --git a/src/App.tsx b/src/App.tsx[m
+[1mindex f0d6387..0e2aa97 100644[m
+[1m--- a/src/App.tsx[m
+[1m+++ b/src/App.tsx[m
+[36m@@ -223,7 +223,7 @@[m [mexport default function App() {[m
+       lang={language}[m
+     >[m
+       <ParticlesBackground isDarkMode={isDarkMode} />[m
+[31m-      <div className='relative z-10'>[m
+[32m+[m[32m      <div className='relative z-10 overflow-x-hidden'>[m
+         <Navbar[m
+           isDarkMode={isDarkMode}[m
+           setIsDarkMode={v => setIsDarkMode(v)}[m
+[1mdiff --git a/src/components/Contact.tsx b/src/components/Contact.tsx[m
+[1mindex b7e84aa..0be6783 100644[m
+[1m--- a/src/components/Contact.tsx[m
+[1m+++ b/src/components/Contact.tsx[m
+[36m@@ -32,7 +32,7 @@[m [mexport function Contact({ isDarkMode, title, subtitle, isFr }: Props) {[m
+       aria-labelledby='contact-heading'[m
+       className={`py-20 md:py-32 ${isDarkMode ? 'bg-gray-900/60' : 'bg-gray-100/60'}`}[m
+     >[m
+[31m-      <div className='max-w-6xl mx-auto px-4 w-full'>[m
+[32m+[m[32m      <div className='max-w-6xl mx-auto px-4 w-full overflow-x-hidden'>[m
+         <div ref={headerRef} className='text-center mb-12 md:mb-16'>[m
+           <h2[m
+             id='contact-heading'[m
+[36m@@ -50,7 +50,7 @@[m [mexport function Contact({ isDarkMode, title, subtitle, isFr }: Props) {[m
+ [m
+         <div[m
+           ref={cardsRef}[m
+[31m-          className='grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12'[m
+[32m+[m[32m          className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12'[m
+         >[m
+           <ContactCard[m
+             isDarkMode={isDarkMode}[m
+[1mdiff --git a/src/components/ContactCard.tsx b/src/components/ContactCard.tsx[m
+[1mindex b018755..ec31ffc 100644[m
+[1m--- a/src/components/ContactCard.tsx[m
+[1m+++ b/src/components/ContactCard.tsx[m
+[36m@@ -30,7 +30,7 @@[m [mexport const ContactCard = ({[m
+   return ([m
+     <div[m
+       ref={cardRef}[m
+[31m-      className={`p-6 rounded-xl border transition-all duration-300 hover:scale-105 ${[m
+[32m+[m[32m      className={`p-4 md:p-6 rounded-xl border transition-all duration-300 hover:scale-105 min-h-[160px] flex flex-col justify-center ${[m
+         isDarkMode[m
+           ? `bg-gray-800/50 border-gray-700 ${hoverColor} hover:bg-gray-800/70`[m
+           : `bg-white border-gray-200 ${hoverColor} hover:bg-gray-50 shadow-sm hover:shadow-md`[m
+[36m@@ -40,11 +40,11 @@[m [mexport const ContactCard = ({[m
+         <div className={`inline-flex p-4 ${iconBg} rounded-xl mb-4`}>[m
+           {icon}[m
+         </div>[m
+[31m-        <h3 className='text-lg font-semibold mb-2'>{title}</h3>[m
+[32m+[m[32m        <h3 className='text-base md:text-lg font-semibold mb-2 break-words'>{title}</h3>[m
+         <AnimatedLink[m
+           href={href}[m
+           isExternal={isExternal}[m
+[31m-          className={`text-sm ${[m
+[32m+[m[32m          className={`text-xs md:text-sm break-all ${[m
+             isDarkMode[m
+               ? 'text-blue-300 hover:text-blue-200'[m
+               : 'text-blue-700 hover:text-blue-600'[m
