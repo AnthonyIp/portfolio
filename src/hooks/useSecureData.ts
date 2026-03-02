@@ -125,7 +125,10 @@ export function useSecureData(language: Language) {
   const getLocalizedTimeline = useMemo(() => {
     return state.data.timeline.map(item => ({
       type: item.type,
-      year: item.year,
+      year:
+        language === 'fr'
+          ? item.year_fr || item.year || item.year_en
+          : item.year_en || item.year || item.year_fr,
       title: language === 'fr' ? item.title_fr : item.title_en,
       institution:
         language === 'fr' ? item.institution_fr : item.institution_en,

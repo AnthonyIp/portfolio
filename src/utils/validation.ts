@@ -2,8 +2,10 @@ import { z } from 'zod';
 
 // Schémas de validation pour les données
 export const TimelineItemSchema = z.object({
-  type: z.enum(['education', 'work']),
-  year: z.string().min(1),
+  type: z.enum(['education', 'experience', 'work']),
+  year: z.string().min(1).optional(),
+  year_fr: z.string().min(1).optional(),
+  year_en: z.string().min(1).optional(),
   title_fr: z.string().min(1),
   title_en: z.string().min(1),
   institution_fr: z.string().min(1),

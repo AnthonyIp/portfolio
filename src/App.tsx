@@ -85,7 +85,10 @@ export default function App() {
   const timelineData = useMemo(() => {
     return (timelineRaw || []).map((item: any) => ({
       type: item.type,
-      year: item.year,
+      year:
+        language === 'fr'
+          ? item.year_fr || item.year || item.year_en
+          : item.year_en || item.year || item.year_fr,
       title:
         language === 'fr'
           ? item.title_fr || item.title_en

@@ -100,7 +100,8 @@
     },
     {
       "type": "experience",
-      "year": "2024-Present",
+      "year_en": "2024-Present",
+      "year_fr": "2024-Présent",
       "title_en": "Freelance Full-Stack Developer",
       "title_fr": "Développeur Full-Stack Freelance",
       "institution_en": "Independent",
