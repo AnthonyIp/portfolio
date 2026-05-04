@@ -22,25 +22,30 @@ export function ProjectModal({
   // Get localized content
   if (!project) return null;
 
-  type LocalizedField =
+  type LocalizedTextField =
     | 'title'
     | 'description'
-    | 'features'
     | 'duration'
     | 'team'
     | 'role'
     | 'challenges';
-  const getLocalizedField = (field: LocalizedField) =>
+  const getLocalizedTextField = (field: LocalizedTextField): string =>
     project[`${field}_${language}` as keyof Project] ||
-    project[`${field}_en` as keyof Project];
+    project[`${field}_en` as keyof Project] ||
+    '';
 
-  const title = getLocalizedField('title');
-  const description = getLocalizedField('description');
-  const features = getLocalizedField('features') || [];
-  const duration = getLocalizedField('duration');
-  const team = getLocalizedField('team');
-  const role = getLocalizedField('role');
-  const challenges = getLocalizedField('challenges');
+  const title = getLocalizedTextField('title');
+  const description = getLocalizedTextField('description');
+  const features =
+    project[`features_${language}` as keyof Project] ||
+    project.features_en ||
+    [];
+  const duration = getLocalizedTextField('duration');
+  const team = getLocalizedTextField('team');
+  const role = getLocalizedTextField('role');
+  const challenges = getLocalizedTextField('challenges');
+  const hasLiveLink = Boolean(project.live);
+  const hasGithubLink = Boolean(project.github);
 
   if (!isOpen) return null;
 
@@ -199,27 +204,32 @@ export function ProjectModal({
                 </div>
               )}
 
-              {/* Links */}
-              <div className='flex flex-col gap-3'>
-                <a
-                  href={project.live}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${isDarkMode ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
-                >
-                  <ExternalLink size={20} />
-                  {currentT.viewOnline}
-                </a>
-                <a
-                  href={project.github}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-white border border-gray-600' : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300'}`}
-                >
-                  <Github size={20} />
-                  {currentT.viewSource}
-                </a>
-              </div>
+              {(hasLiveLink || hasGithubLink) && (
+                <div className='flex flex-col gap-3'>
+                  {hasLiveLink && (
+                    <a
+                      href={project.live}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${isDarkMode ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
+                    >
+                      <ExternalLink size={20} />
+                      {currentT.viewOnline}
+                    </a>
+                  )}
+                  {hasGithubLink && (
+                    <a
+                      href={project.github}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-white border border-gray-600' : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300'}`}
+                    >
+                      <Github size={20} />
+                      {currentT.viewSource}
+                    </a>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
