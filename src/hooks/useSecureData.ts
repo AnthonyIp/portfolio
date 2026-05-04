@@ -1,10 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import {
-  loadI18nData,
-  loadTimelineData,
-  loadProjectsData,
-  handleApiError,
-} from '../utils/api';
+import { loadI18nData, loadTimelineData, loadProjectsData } from '../utils/api';
 import {
   validateI18nData,
   validateTimelineData,
@@ -39,6 +34,9 @@ const INITIAL_STATE: UseSecureDataState = {
   lastUpdated: null,
 };
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null;
+
 // Hook principal pour gérer les données de manière sécurisée
 export function useSecureData(language: Language) {
   const [state, setState] = useState<UseSecureDataState>(INITIAL_STATE);
@@ -67,12 +65,18 @@ export function useSecureData(language: Language) {
         projectsResult.status === 'fulfilled'
           ? projectsResult.value.data
           : null;
+      const localizedI18n =
+        isRecord(i18nData) && (i18nData[language] || i18nData.fr);
 
       // Valider les données
       const validatedData: ValidatedData = {
-        i18n: validateI18nData(i18nData),
-        timeline: validateTimelineData(timelineData),
-        projects: validateProjectsData(projectsData),
+        i18n: validateI18nData(localizedI18n),
+        timeline: validateTimelineData(
+          isRecord(timelineData) ? timelineData.timeline : []
+        ),
+        projects: validateProjectsData(
+          isRecord(projectsData) ? projectsData.projects : []
+        ),
       };
 
       setState({

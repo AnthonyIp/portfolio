@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 // Schémas de validation pour les données
 export const TimelineItemSchema = z.object({
-  type: z.enum(['education', 'work']),
+  type: z.enum(['education', 'experience']),
   year: z.string().min(1),
   title_fr: z.string().min(1),
   title_en: z.string().min(1),
@@ -22,9 +22,9 @@ export const ProjectSchema = z.object({
   description_fr: z.string().min(1),
   description_en: z.string().min(1),
   tech: z.array(z.string()),
-  image: z.string().url().optional(),
-  github: z.string().url().optional(),
-  live: z.string().url().optional(),
+  image: z.string().min(1).optional(),
+  github: z.string().url().or(z.literal('')).optional(),
+  live: z.string().url().or(z.literal('')).optional(),
   category: z.string().min(1),
   features_fr: z.array(z.string()),
   features_en: z.array(z.string()),
@@ -34,8 +34,8 @@ export const ProjectSchema = z.object({
   team_en: z.string().min(1),
   role_fr: z.string().min(1),
   role_en: z.string().min(1),
-  challenges_fr: z.array(z.string()),
-  challenges_en: z.array(z.string()),
+  challenges_fr: z.string().min(1),
+  challenges_en: z.string().min(1),
   longDescription_fr: z.string().min(1),
   longDescription_en: z.string().min(1),
 });

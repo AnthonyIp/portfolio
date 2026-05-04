@@ -10,7 +10,18 @@ import BackToTop from './components/BackToTop';
 import { useLocalStorage } from './hooks';
 import { useLenis } from './hooks/useLenis';
 import type { Language } from './types';
+import {
+  validateI18nData,
+  validateProjectsData,
+  validateTimelineData,
+  type ValidatedI18n,
+  type ValidatedProject,
+  type ValidatedTimelineItem,
+} from './utils/validation';
 import { useEffect, useMemo, useState } from 'react';
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null;
 
 export default function App() {
   // Initialiser Lenis pour le scroll fluide
@@ -22,10 +33,10 @@ export default function App() {
   );
   // default FR; if no saved language, detect browser -> fr else en
   const [language, setLanguage] = useLocalStorage<Language>('lang', 'fr');
-  const [t, setT] = useState<any>({});
+  const [t, setT] = useState<ValidatedI18n>(() => validateI18nData({}));
   const isFr = language === 'fr';
-  const [timelineRaw, setTimelineRaw] = useState<any[]>([]);
-  const [projectsRaw, setProjectsRaw] = useState<any[]>([]);
+  const [timelineRaw, setTimelineRaw] = useState<ValidatedTimelineItem[]>([]);
+  const [projectsRaw, setProjectsRaw] = useState<ValidatedProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -68,9 +79,18 @@ export default function App() {
           projectsResponse.json(),
         ]);
 
-        setT(i18nData[language] || i18nData['fr'] || {});
-        setTimelineRaw(timelineData.timeline || []);
-        setProjectsRaw(projectsData.projects || []);
+        const localizedI18n =
+          isRecord(i18nData) && (i18nData[language] || i18nData.fr);
+        const timelineItems = isRecord(timelineData)
+          ? timelineData.timeline
+          : [];
+        const projectItems = isRecord(projectsData)
+          ? projectsData.projects
+          : [];
+
+        setT(validateI18nData(localizedI18n));
+        setTimelineRaw(validateTimelineData(timelineItems));
+        setProjectsRaw(validateProjectsData(projectItems));
         setLoading(false);
       } catch (err) {
         console.error('Erreur de chargement:', err);
@@ -83,7 +103,7 @@ export default function App() {
   }, [language]);
 
   const timelineData = useMemo(() => {
-    return (timelineRaw || []).map((item: any) => ({
+    return timelineRaw.map(item => ({
       type: item.type,
       year: item.year,
       title:
@@ -108,7 +128,7 @@ export default function App() {
   }, [timelineRaw, language]);
 
   const projects = useMemo(() => {
-    return (projectsRaw || []).map((p: any) => ({
+    return projectsRaw.map(p => ({
       title_fr: p.title_fr,
       title_en: p.title_en,
       description_fr: p.description_fr,

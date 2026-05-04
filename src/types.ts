@@ -1,7 +1,7 @@
 export type Language = 'en' | 'fr';
 
 export type TimelineItem = {
-  type: 'education' | 'work';
+  type: 'education' | 'experience';
   year: string;
   title: string;
   institution: string;
