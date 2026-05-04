@@ -15,15 +15,22 @@ export const useLenis = () => {
       infinite: false,
       lerp: 0.1,
     });
+    let animationFrameId = 0;
+
+    window.lenis = lenis;
 
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      animationFrameId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    animationFrameId = requestAnimationFrame(raf);
 
     return () => {
+      cancelAnimationFrame(animationFrameId);
+      if (window.lenis === lenis) {
+        delete window.lenis;
+      }
       lenis.destroy();
     };
   }, []);
