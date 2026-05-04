@@ -16,8 +16,8 @@ const COMMON_ANIMATION_CONFIG = {
   },
 };
 
-export const useScrollAnimation = () => {
-  const elementRef = useRef<HTMLElement>(null);
+export const useScrollAnimation = <T extends HTMLElement = HTMLElement>() => {
+  const elementRef = useRef<T>(null);
 
   useEffect(() => {
     if (!elementRef.current) return;
@@ -59,8 +59,10 @@ export const useScrollAnimation = () => {
   return elementRef;
 };
 
-export const useFadeInAnimation = (delay = 0) => {
-  const elementRef = useRef<HTMLElement>(null);
+export const useFadeInAnimation = <T extends HTMLElement = HTMLElement>(
+  delay = 0
+) => {
+  const elementRef = useRef<T>(null);
 
   useEffect(() => {
     if (!elementRef.current) return;

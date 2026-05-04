@@ -1,35 +1,31 @@
 import { ReactNode } from 'react';
-import { useContactCardAnimation } from '../hooks/useCardAnimation';
 import { AnimatedLink } from './AnimatedLink';
 
 interface ContactCardProps {
   isDarkMode: boolean;
-  index: number;
   icon: ReactNode;
   title: string;
   content: string;
   href: string;
   isExternal?: boolean;
+  download?: boolean;
   iconBg: string;
   hoverColor: string;
 }
 
 export const ContactCard = ({
   isDarkMode,
-  index,
   icon,
   title,
   content,
   href,
   isExternal = false,
+  download = false,
   iconBg,
   hoverColor,
 }: ContactCardProps) => {
-  const cardRef = useContactCardAnimation(index);
-
   return (
     <div
-      ref={cardRef}
       className={`p-4 md:p-6 rounded-xl border transition-all duration-300 hover:scale-105 min-h-[160px] flex flex-col justify-center ${
         isDarkMode
           ? `bg-gray-800/50 border-gray-700 ${hoverColor} hover:bg-gray-800/70`
@@ -46,6 +42,7 @@ export const ContactCard = ({
         <AnimatedLink
           href={href}
           isExternal={isExternal}
+          download={download}
           className={`text-xs md:text-sm break-all ${
             isDarkMode
               ? 'text-blue-300 hover:text-blue-200'

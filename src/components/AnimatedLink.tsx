@@ -8,6 +8,7 @@ interface AnimatedLinkProps {
   target?: string;
   rel?: string;
   isExternal?: boolean;
+  download?: string | boolean;
   underline?: boolean;
 }
 
@@ -18,6 +19,7 @@ export const AnimatedLink = ({
   target,
   rel,
   isExternal = false,
+  download,
   underline = true,
 }: AnimatedLinkProps) => {
   const linkRef = useRef<HTMLAnchorElement>(null);
@@ -33,19 +35,6 @@ export const AnimatedLink = ({
         duration: 0.3,
         ease: 'power2.out',
       });
-
-      if (underline) {
-        gsap.fromTo(
-          link,
-          { scaleX: 0 },
-          {
-            scaleX: 1,
-            duration: 0.4,
-            ease: 'power2.out',
-            transformOrigin: 'left',
-          }
-        );
-      }
     };
 
     const handleMouseLeave = () => {
@@ -55,15 +44,6 @@ export const AnimatedLink = ({
         duration: 0.3,
         ease: 'power2.out',
       });
-
-      if (underline) {
-        gsap.to(link, {
-          scaleX: 0,
-          duration: 0.4,
-          ease: 'power2.out',
-          transformOrigin: 'right',
-        });
-      }
     };
 
     link.addEventListener('mouseenter', handleMouseEnter);
@@ -78,7 +58,7 @@ export const AnimatedLink = ({
   const baseClasses =
     'relative inline-block transition-all duration-200 ease-out';
   const underlineClasses = underline
-    ? 'after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-current after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-out'
+    ? 'after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-current after:origin-left after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:ease-out'
     : '';
 
   const classes = `${baseClasses} ${underlineClasses} ${className}`;
@@ -89,6 +69,7 @@ export const AnimatedLink = ({
       href={href}
       target={target || (isExternal ? '_blank' : undefined)}
       rel={rel || (isExternal ? 'noopener noreferrer' : undefined)}
+      download={download}
       className={classes}
     >
       {children}

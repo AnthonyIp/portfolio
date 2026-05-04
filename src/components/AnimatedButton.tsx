@@ -8,6 +8,7 @@ interface AnimatedButtonProps {
   href?: string;
   target?: string;
   rel?: string;
+  download?: string | boolean;
   type?: 'button' | 'submit' | 'reset';
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
@@ -20,6 +21,7 @@ export const AnimatedButton = ({
   href,
   target,
   rel,
+  download,
   type = 'button',
   variant = 'primary',
   size = 'md',
@@ -88,6 +90,7 @@ export const AnimatedButton = ({
         href={href}
         target={target}
         rel={rel}
+        download={download}
         className={classes}
       >
         {children}

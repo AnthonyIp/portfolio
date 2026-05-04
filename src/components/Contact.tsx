@@ -1,10 +1,8 @@
-import { Github, Linkedin, Mail, Phone } from 'lucide-react';
+import { Download, Github, Linkedin, Mail, Phone } from 'lucide-react';
 import {
   useScrollAnimation,
   useFadeInAnimation,
-  useSlideInAnimation,
 } from '../hooks/useScrollAnimation';
-import { AnimatedButton } from './AnimatedButton';
 import { ContactCard } from './ContactCard';
 
 type Props = {
@@ -20,10 +18,10 @@ export function Contact({ isDarkMode, title, subtitle, isFr }: Props) {
   const githubUrl = 'https://github.com/AnthonyIp';
   const linkedinUrl = 'https://linkedin.com/in/anthony-ip-1206';
 
-  const sectionRef = useScrollAnimation();
-  const headerRef = useFadeInAnimation(0.2);
-  const cardsRef = useSlideInAnimation('up', 0.4);
-  const buttonRef = useFadeInAnimation(0.6);
+  const sectionRef = useScrollAnimation<HTMLElement>();
+  const headerRef = useFadeInAnimation<HTMLDivElement>(0.2);
+  const resumeHref = isFr ? '/cv/cv.pdf' : '/cv/cv-en.pdf';
+  const resumeLabel = isFr ? 'Télécharger mon CV' : 'Download my resume';
 
   return (
     <section
@@ -48,13 +46,9 @@ export function Contact({ isDarkMode, title, subtitle, isFr }: Props) {
           </p>
         </div>
 
-        <div
-          ref={cardsRef}
-          className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12'
-        >
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6 mb-12'>
           <ContactCard
             isDarkMode={isDarkMode}
-            index={0}
             icon={<Mail size={28} className='text-white' />}
             title={isFr ? 'Email' : 'Email'}
             content={emailAddr}
@@ -64,7 +58,6 @@ export function Contact({ isDarkMode, title, subtitle, isFr }: Props) {
           />
           <ContactCard
             isDarkMode={isDarkMode}
-            index={1}
             icon={<Phone size={28} className='text-white' />}
             title={isFr ? 'Téléphone' : 'Phone'}
             content={phoneNum}
@@ -74,7 +67,6 @@ export function Contact({ isDarkMode, title, subtitle, isFr }: Props) {
           />
           <ContactCard
             isDarkMode={isDarkMode}
-            index={2}
             icon={<Github size={28} className='text-white' />}
             title='GitHub'
             content={githubUrl.replace('https://', '')}
@@ -85,7 +77,6 @@ export function Contact({ isDarkMode, title, subtitle, isFr }: Props) {
           />
           <ContactCard
             isDarkMode={isDarkMode}
-            index={3}
             icon={<Linkedin size={28} className='text-white' />}
             title='LinkedIn'
             content={linkedinUrl.replace('https://', '')}
@@ -94,17 +85,16 @@ export function Contact({ isDarkMode, title, subtitle, isFr }: Props) {
             iconBg='bg-emerald-600'
             hoverColor='hover:border-emerald-500/50'
           />
-        </div>
-
-        <div ref={buttonRef} className='text-center'>
-          <AnimatedButton
-            href={isFr ? '/cv/cv.pdf' : '/cv/cv-en.pdf'}
-            variant='primary'
-            size='lg'
-            className='inline-flex items-center px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl'
-          >
-            {isFr ? 'Télécharger mon CV' : 'Download my resume'}
-          </AnimatedButton>
+          <ContactCard
+            isDarkMode={isDarkMode}
+            icon={<Download size={28} className='text-white' />}
+            title={isFr ? 'CV' : 'Resume'}
+            content={resumeLabel}
+            href={resumeHref}
+            download
+            iconBg='bg-rose-600'
+            hoverColor='hover:border-rose-500/50'
+          />
         </div>
       </div>
     </section>
