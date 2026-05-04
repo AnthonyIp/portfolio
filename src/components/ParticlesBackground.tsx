@@ -13,13 +13,22 @@ declare global {
 export default function ParticlesBackground({ isDarkMode }: Props) {
   useEffect(() => {
     let cancelled = false;
+    let animationFrameId: number | null = null;
+    let attempts = 0;
+    const maxAttempts = 120;
+
     const init = () => {
       if (cancelled) return;
+
       const container = document.getElementById('particles-js');
       if (!container || !window.particlesJS) {
-        requestAnimationFrame(init);
+        attempts += 1;
+        if (attempts < maxAttempts) {
+          animationFrameId = requestAnimationFrame(init);
+        }
         return;
       }
+
       const configUrl = isDarkMode
         ? '/datas/particles-dark.json'
         : '/datas/particles-light.json';
@@ -28,6 +37,9 @@ export default function ParticlesBackground({ isDarkMode }: Props) {
     init();
     return () => {
       cancelled = true;
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+      }
     };
   }, [isDarkMode]);
 
