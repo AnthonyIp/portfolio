@@ -284,6 +284,7 @@ export default function App() {
             title={t.timeline?.title}
             subtitle={t.timeline?.subtitle}
             items={timelineData}
+            language={language}
           />
           <Projects
             isDarkMode={isDarkMode}

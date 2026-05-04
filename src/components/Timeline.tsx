@@ -5,20 +5,43 @@ import {
   useSlideInAnimation,
 } from '../hooks/useScrollAnimation';
 import { useTimelineItemAnimation } from '../hooks/useCardAnimation';
-import type { TimelineItem } from '../types';
+import type { Language, TimelineItem } from '../types';
 
 type Props = {
   isDarkMode: boolean;
   title: string;
   subtitle: string;
   items: TimelineItem[];
+  language: Language;
 };
 
-export function Timeline({ isDarkMode, title, subtitle, items }: Props) {
+const mobileLabels = {
+  fr: {
+    education: 'Formation',
+    experience: 'Expérience',
+    technologies: 'Technologies utilisées :',
+    skills: 'Compétences développées :',
+  },
+  en: {
+    education: 'Education',
+    experience: 'Experience',
+    technologies: 'Technologies used:',
+    skills: 'Skills developed:',
+  },
+} as const;
+
+export function Timeline({
+  isDarkMode,
+  title,
+  subtitle,
+  items,
+  language,
+}: Props) {
   const sectionRef = useScrollAnimation();
   const headerRef = useFadeInAnimation(0.2);
   const desktopTimelineRef = useFadeInAnimation(0.4);
   const mobileTimelineRef = useFadeInAnimation(0.4);
+  const labels = mobileLabels[language];
 
   return (
     <section
@@ -197,8 +220,8 @@ export function Timeline({ isDarkMode, title, subtitle, items }: Props) {
                             }`}
                           >
                             {item.type === 'education'
-                              ? 'Formation'
-                              : 'Expérience'}
+                              ? labels.education
+                              : labels.experience}
                           </span>
                         </div>
 
@@ -253,7 +276,7 @@ export function Timeline({ isDarkMode, title, subtitle, items }: Props) {
                                   isDarkMode ? 'text-gray-400' : 'text-gray-500'
                                 }`}
                               >
-                                Technologies utilisées :
+                                {labels.technologies}
                               </p>
                               <div className='flex flex-wrap gap-2'>
                                 {((item as any).tech as string[]).map(t => (
@@ -281,7 +304,7 @@ export function Timeline({ isDarkMode, title, subtitle, items }: Props) {
                                   isDarkMode ? 'text-gray-400' : 'text-gray-500'
                                 }`}
                               >
-                                Compétences développées :
+                                {labels.skills}
                               </p>
                               <div className='flex flex-wrap gap-2'>
                                 {((item as any).skills as string[]).map(s => (
